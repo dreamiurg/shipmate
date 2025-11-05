@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/dreamiurg/shipmate/compare/v1.1.4...v1.1.5) (2025-11-05)
+
+
+### Bug Fixes
+
+* remove slash command causing triple invocation ([#13](https://github.com/dreamiurg/shipmate/issues/13)) ([b627318](https://github.com/dreamiurg/shipmate/commit/b6273181ec1582d3e4fe665eb405aa2549f69c19))
+
 ## [1.1.4](https://github.com/dreamiurg/shipmate/compare/v1.1.3...v1.1.4) (2025-11-05)
 
 
