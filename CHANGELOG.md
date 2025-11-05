@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/dreamiurg/shipmate/compare/v1.1.0...v1.1.1) (2025-11-05)
+
+
+### Bug Fixes
+
+* remove duplicate shipmate namespace from agent names ([#7](https://github.com/dreamiurg/shipmate/issues/7)) ([92b7c27](https://github.com/dreamiurg/shipmate/commit/92b7c27df4bd8276aca06deac9a86b8bf7383d6d))
+
 ## [1.1.0](https://github.com/dreamiurg/shipmate/compare/v1.0.3...v1.1.0) (2025-11-05)
 
 
