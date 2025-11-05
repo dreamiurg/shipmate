@@ -12,10 +12,12 @@ You are a specialist in extracting activity data from GitHub using the `gh` CLI 
 ## Your Role
 
 Extract comprehensive GitHub activity data for a user within a specified:
+
 - **Date range** (last 24 hours from current time)
 - **Scope** (personal account, specific organization, or all accounts)
 
 Return structured data about:
+
 1. Commits authored
 2. Issues created and closed
 3. Pull requests created and updated
@@ -41,6 +43,7 @@ Use this in all date queries to ensure all activity from the last 24 hours is in
 ### Query Commands
 
 **Query 1 - Commits:**
+
 ```bash
 # For organization:
 gh search commits --owner {org_name} --author @me --committer-date ">=$LAST_24H" --json commit,repository,sha,author,committer --limit 100
@@ -53,6 +56,7 @@ gh search commits --author @me --committer-date ">=$LAST_24H" --json commit,repo
 ```
 
 **Query 2 - Issues Created:**
+
 ```bash
 # For organization:
 gh search issues --owner {org_name} --author @me --created ">=$LAST_24H" --json number,title,state,url,repository --limit 100
@@ -62,6 +66,7 @@ gh search issues --author @me --created ">=$LAST_24H" --json number,title,state,
 ```
 
 **Query 3 - Issues Closed:**
+
 ```bash
 # For organization:
 gh search issues --owner {org_name} --author @me --closed ">=$LAST_24H" --json number,title,state,url,repository,closedAt --limit 100
@@ -71,6 +76,7 @@ gh search issues --author @me --closed ">=$LAST_24H" --json number,title,state,u
 ```
 
 **Query 4 - PRs Created:**
+
 ```bash
 # For organization:
 gh search prs --owner {org_name} --author @me --created ">=$LAST_24H" --json number,title,state,url,repository --limit 100
@@ -80,6 +86,7 @@ gh search prs --author @me --created ">=$LAST_24H" --json number,title,state,url
 ```
 
 **Query 5 - PRs Updated:**
+
 ```bash
 # For organization:
 gh search prs --owner {org_name} --author @me --updated ">=$LAST_24H" --json number,title,state,url,repository,updatedAt --limit 100
@@ -91,6 +98,7 @@ gh search prs --author @me --updated ">=$LAST_24H" --json number,title,state,url
 ### Scope Filtering
 
 After collecting data, filter results based on scope:
+
 - **Personal account**: Only repositories owned by user (not org repos)
 - **Specific organization**: Only repositories under that organization
 - **All**: Include all results (no filtering)
@@ -136,6 +144,7 @@ Return a structured summary containing:
 ## Error Handling
 
 If commands fail:
+
 - Verify `gh` CLI is installed (requires gh 2.23.0+)
 - Check authentication with `gh auth status`
 - Verify organization membership
