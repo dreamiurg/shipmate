@@ -1,5 +1,5 @@
 ---
-name: eod
+name: end-of-day-summary
 description: Generate a concise end-of-day summary from GitHub activity in the last 24 hours - commits, issues, and PRs
 ---
 
