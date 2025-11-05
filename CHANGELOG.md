@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/dreamiurg/shipmate/compare/v1.0.3...v1.1.0) (2025-11-05)
+
+
+### Features
+
+* add pre-commit hooks for gitleaks and markdownlint ([#6](https://github.com/dreamiurg/shipmate/issues/6)) ([7ec3de2](https://github.com/dreamiurg/shipmate/commit/7ec3de2fd002266b8f4c7dd08ef63833a47bb0c3))
+
 ## [1.0.3](https://github.com/dreamiurg/shipmate/compare/v1.0.2...v1.0.3) (2025-11-05)
 
 
