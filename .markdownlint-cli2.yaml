@@ -1,0 +1,64 @@
+# Markdownlint configuration
+# See https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
+config:
+  # MD013/line-length - Line length (disabled)
+  MD013: false
+
+  # MD024/no-duplicate-heading - Multiple headings with the same content
+  MD024:
+    siblings_only: true
+
+  # MD033/no-inline-html - Inline HTML
+  MD033:
+    allowed_elements:
+      - br
+      - span
+      - details
+      - summary
+      - img
+      - a
+      - table
+      - thead
+      - tbody
+      - tr
+      - th
+      - td
+      - pre
+      - code
+      - callout
+      - columns
+      - column
+      - page
+      - database
+      - audio
+      - file
+      - image
+      - pdf
+      - video
+      - table_of_contents
+      - synced_block
+      - synced_block_reference
+      - meeting-notes
+      - notes
+      - transcript
+      - unknown
+      - mention-user
+      - mention-page
+      - mention-database
+      - mention-data-source
+      - mention-date
+      - col
+      - colgroup
+
+  # MD041/first-line-heading - First line in file should be a top level heading
+  MD041: false
+
+  # MD046/code-block-style - Code block style
+  MD046:
+    style: fenced
+
+# Globs to ignore
+ignores:
+  - node_modules/
+  - CHANGELOG.md

@@ -16,6 +16,7 @@ Transform raw GitHub activity data into a readable, engaging summary that teamma
 ## Input
 
 You will receive:
+
 1. **Structured GitHub activity data** containing:
    - Commits with messages, repositories, and timestamps
    - Issues created and closed (with full issue bodies)
@@ -44,12 +45,14 @@ Generate a summary following this structure:
 ## Writing Guidelines
 
 ### Tone
+
 - **Casual and direct**: "Dug through...", "Turns out...", "Found out...", "Figured out..."
 - **Conversational**: Write like you're talking to a colleague
 - **Plain English**: Avoid corporate buzzwords and excessive jargon
 - **Past tense**: "Found", "Documented", "Set up" (not "Finding", "Documenting")
 
 ### Content
+
 - **Focus on discoveries**: What did you learn? What was surprising?
 - **Include specifics**: File sizes, time spans, concrete numbers show depth
 - **Explain insights**: Why does this matter? What does it enable?
@@ -58,18 +61,21 @@ Generate a summary following this structure:
 ### Activity Weighting and Grouping
 
 **User-Selected Topics** (separate bullets, top of list):
+
 - The user has already chosen which topics to highlight (2-4 topics)
 - Create one detailed bullet for each selected topic
 - Include findings, insights, and specific details
 - Show the depth of work with concrete examples
 
 **Housekeeping** (grouped into single bullet, bottom of list):
+
 - ALL activities NOT selected by the user
 - Group them together in a single "Housekeeping" bullet
 - Brief mention of what was done, without excessive detail
 - List them in a flow: "Set up X, added Y, created Z, and iterated on W"
 
 **CRITICAL**:
+
 - Do NOT apply your own judgment about what's "major" vs "minor"
 - The user has already made this decision by selecting topics
 - If a topic was NOT selected, it goes in Housekeeping, regardless of how substantial it seems

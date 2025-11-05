@@ -44,6 +44,7 @@ Simply run the end-of-day command:
 ```
 
 The skill will:
+
 1. Ask which GitHub scope to include (personal, org, or all)
 2. Extract your activity from the last 24 hours
 3. Identify themes and topics from your work
@@ -62,6 +63,7 @@ The skill will:
 ## Configuration
 
 Shipmate can be configured via `shipmate.yaml` in either:
+
 - `~/.claude/shipmate.yaml` (global config)
 - `<project>/.claude/shipmate.yaml` (project-specific, overrides global)
 
@@ -127,6 +129,7 @@ This separation keeps data extraction fast and cheap while using a more capable 
 ### Change Summary Format
 
 Edit `agents/shipmate:summarizer-agent.md` to customize:
+
 - Tone and style
 - Output structure
 - What details to include/exclude
@@ -134,6 +137,7 @@ Edit `agents/shipmate:summarizer-agent.md` to customize:
 ### Change Data Sources
 
 Edit `agents/shipmate:github-analyzer-agent.md` to:
+
 - Add more GitHub queries
 - Include different time ranges
 - Filter by labels or other criteria
@@ -149,6 +153,7 @@ Edit `agents/shipmate:github-analyzer-agent.md` to:
 ### "gh: command not found"
 
 Install GitHub CLI:
+
 ```bash
 # macOS
 brew install gh
@@ -163,6 +168,7 @@ See https://github.com/cli/cli#installation
 ### "gh authentication required"
 
 Authenticate with GitHub:
+
 ```bash
 gh auth login
 ```
@@ -183,7 +189,7 @@ gh auth login
 
 ### Repository Structure
 
-```
+```text
 shipmate/
 ├── README.md                          # This file
 ├── LICENSE                            # MIT License
@@ -230,6 +236,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 Add `BREAKING CHANGE:` in commit body or use `!` after type (e.g., `feat!:`) to trigger a major version bump.
 
 **Release Process:**
+
 1. Commit changes using conventional commit format
 2. Push to `main` branch
 3. GitHub Actions automatically:
@@ -245,6 +252,7 @@ Add `BREAKING CHANGE:` in commit body or use `!` after type (e.g., `feat!:`) to 
 After modifying files in your local checkout:
 
 1. Copy updated files to `~/.claude/`:
+
    ```bash
    cp skills/shipmate:end-of-day-summary/SKILL.md ~/.claude/skills/shipmate:end-of-day-summary/
    cp agents/shipmate:*.md ~/.claude/agents/
