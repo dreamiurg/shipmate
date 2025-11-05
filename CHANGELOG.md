@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/dreamiurg/shipmate/compare/v1.0.0...v1.0.1) (2025-11-05)
+
+
+### Bug Fixes
+
+* correct version update in SKILL.md footer ([#2](https://github.com/dreamiurg/shipmate/issues/2)) ([d50101b](https://github.com/dreamiurg/shipmate/commit/d50101b21a37adf66c328d1b88ad28724364039c))
+
 ## 1.0.0 (2025-11-05)
 
 
