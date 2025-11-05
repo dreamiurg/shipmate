@@ -12,7 +12,7 @@
         "url": "https://github.com/dreamiurg/shipmate.git"
       },
       "description": "Your daily dev sidekick for tracking what you ship - generates conversational end-of-day summaries from GitHub activity",
-      "version": "1.1.6"
+      "version": "1.1.7"
     }
   ]
 }
