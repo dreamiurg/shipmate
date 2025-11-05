@@ -1,10 +1,15 @@
 # Shipmate
 
 [![Release Version](https://img.shields.io/github/v/release/dreamiurg/shipmate)](https://github.com/dreamiurg/shipmate/releases/latest)
+[![CI](https://github.com/dreamiurg/shipmate/actions/workflows/ci.yml/badge.svg)](https://github.com/dreamiurg/shipmate/actions/workflows/ci.yml)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 > Your daily dev sidekick for tracking what you ship
 
-Shipmate generates conversational end-of-day summaries from your GitHub activity. Perfect for team standups, personal logs, or just remembering what you accomplished today.
+Shipmate is a [Claude Code](https://docs.claude.com/claude-code) plugin that generates conversational end-of-day summaries from your GitHub activity. Perfect for team standups, personal logs, or just remembering what you accomplished today.
 
 ## Installation
 
