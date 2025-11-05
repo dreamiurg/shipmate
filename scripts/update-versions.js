@@ -31,9 +31,9 @@ let skillMd = fs.readFileSync(skillMdPath, 'utf8');
 
 // Check if version footer exists
 if (skillMd.includes('**Version:**')) {
-  // Update existing version
+  // Update existing version - match any non-whitespace after "Version:"
   skillMd = skillMd.replace(
-    /\*\*Version:\*\* [\d.]+/,
+    /\*\*Version:\*\* [^\s]+/,
     `**Version:** ${version}`
   );
   skillMd = skillMd.replace(
