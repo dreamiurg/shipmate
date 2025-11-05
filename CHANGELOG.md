@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/dreamiurg/shipmate/compare/v1.1.2...v1.1.3) (2025-11-05)
+
+
+### Bug Fixes
+
+* enforce mandatory scope selection and todo tracking in eod skill ([#10](https://github.com/dreamiurg/shipmate/issues/10)) ([ee3a264](https://github.com/dreamiurg/shipmate/commit/ee3a264ae8a3291c50a243c342fa0524df880c07))
+
 ## [1.1.2](https://github.com/dreamiurg/shipmate/compare/v1.1.1...v1.1.2) (2025-11-05)
 
 
