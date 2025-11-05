@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/dreamiurg/shipmate/compare/v1.0.2...v1.0.3) (2025-11-05)
+
+
+### Bug Fixes
+
+* restore full skill name to end-of-day-summary ([#5](https://github.com/dreamiurg/shipmate/issues/5)) ([2d81835](https://github.com/dreamiurg/shipmate/commit/2d8183587678e5f6fa703f7d55b3eb9dcec210a2))
+
 ## [1.0.2](https://github.com/dreamiurg/shipmate/compare/v1.0.1...v1.0.2) (2025-11-05)
 
 
