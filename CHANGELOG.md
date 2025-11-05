@@ -1,3 +1,10 @@
+## [1.1.8](https://github.com/dreamiurg/shipmate/compare/v1.1.7...v1.1.8) (2025-11-05)
+
+
+### Bug Fixes
+
+* use inline date substitution to enable command pre-approval ([#18](https://github.com/dreamiurg/shipmate/issues/18)) ([aff4bc6](https://github.com/dreamiurg/shipmate/commit/aff4bc663d269dd5d01654a4c49de14ca001a684))
+
 ## [1.1.7](https://github.com/dreamiurg/shipmate/compare/v1.1.6...v1.1.7) (2025-11-05)
 
 
