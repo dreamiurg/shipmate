@@ -51,7 +51,7 @@ The integration posts summaries with this structure:
 ## Customization
 
 To customize the format:
-1. Edit `skills/shipmate:end-of-day-summary/SKILL.md` Step 9
+1. Edit `skills/shipmate:eod/SKILL.md` Step 9
 2. Modify the markdown template to match your preferences
 3. Adjust the bullet structure, heading levels, or content
 

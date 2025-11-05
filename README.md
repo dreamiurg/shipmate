@@ -33,7 +33,7 @@ In any Claude Code session:
 "What skills are available?"
 ```
 
-You should see `shipmate:end-of-day-summary` listed.
+You should see `shipmate:eod` listed.
 
 ## Usage
 
@@ -142,7 +142,7 @@ Edit `agents/shipmate:github-analyzer-agent.md` to:
 
 1. Create `integrations/<name>/README.md` with setup instructions
 2. Add integration config to `config.example.yaml`
-3. Update `skills/shipmate:end-of-day-summary/SKILL.md` Step 8 to handle the new integration
+3. Update `skills/shipmate:eod/SKILL.md` Step 8 to handle the new integration
 
 ## Troubleshooting
 
@@ -195,7 +195,7 @@ shipmate/
 │   ├── marketplace.json              # Marketplace listing
 │   └── hooks.json                    # Plugin hooks (empty)
 ├── skills/
-│   └── shipmate:end-of-day-summary/
+│   └── shipmate:eod/
 │       └── SKILL.md                   # Main orchestration skill
 ├── agents/
 │   ├── shipmate:github-analyzer-agent.md   # Data extraction
@@ -246,7 +246,7 @@ After modifying files in your local checkout:
 
 1. Copy updated files to `~/.claude/`:
    ```bash
-   cp skills/shipmate:end-of-day-summary/SKILL.md ~/.claude/skills/shipmate:end-of-day-summary/
+   cp skills/shipmate:eod/SKILL.md ~/.claude/skills/shipmate:eod/
    cp agents/shipmate:*.md ~/.claude/agents/
    ```
 

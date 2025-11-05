@@ -300,7 +300,7 @@ Skill: "Posted to Notion Daily Log!" (if applicable)
 This skill uses:
 - `agents/shipmate:github-analyzer-agent.md` - Data extraction agent
 - `agents/shipmate:summarizer-agent.md` - Summary writing agent
-- `skills/shipmate:end-of-day-summary/SKILL.md` - This orchestration skill
+- `skills/shipmate:eod/SKILL.md` - This orchestration skill
 - `commands/shipmate:eod.md` - Slash command shortcut
 - `integrations/notion/` - Optional Notion integration
 

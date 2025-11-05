@@ -20,7 +20,7 @@
     "team-updates"
   ],
   "skills": [
-    "./skills/shipmate:end-of-day-summary"
+    "./skills/shipmate:eod"
   ],
   "agents": [
     "./agents/shipmate:github-analyzer-agent.md",
