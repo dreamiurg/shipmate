@@ -1,0 +1,32 @@
+{
+  "name": "shipmate",
+  "version": "1.0.0",
+  "description": "Your daily dev sidekick for tracking what you ship - generates conversational end-of-day summaries from GitHub activity",
+  "author": {
+    "name": "dreamiurg",
+    "email": "dreamiurg@users.noreply.github.com"
+  },
+  "homepage": "https://github.com/dreamiurg/shipmate",
+  "repository": "https://github.com/dreamiurg/shipmate",
+  "license": "MIT",
+  "keywords": [
+    "github",
+    "productivity",
+    "standup",
+    "daily-summary",
+    "end-of-day",
+    "activity-tracking",
+    "notion",
+    "team-updates"
+  ],
+  "skills": [
+    "./skills/shipmate:end-of-day-summary"
+  ],
+  "agents": [
+    "./agents/shipmate:github-analyzer-agent.md",
+    "./agents/shipmate:summarizer-agent.md"
+  ],
+  "commands": [
+    "./commands/shipmate:eod.md"
+  ]
+}

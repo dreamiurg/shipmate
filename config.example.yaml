@@ -1,0 +1,39 @@
+# Shipmate Configuration
+#
+# Copy this file to one of these locations:
+#   - ~/.claude/shipmate.yaml (global config)
+#   - <project>/.claude/shipmate.yaml (project-specific, overrides global)
+#
+# All settings are optional and will prompt interactively if not provided.
+
+# GitHub scope (optional)
+# Determines which GitHub activity to include in summaries
+# Options:
+#   - "personal" - Only your personal account repositories
+#   - "all" - All repositories (personal + all organizations)
+#   - "<org-name>" - Specific organization (e.g., "my-company")
+#
+# If not set or empty, you'll be prompted each time
+github_scope: ""
+
+# Integrations (optional)
+# Enable/disable various integrations for posting summaries
+integrations:
+
+  # Notion Daily Log integration
+  # Posts your daily summary to a Notion page
+  notion:
+    enabled: false
+
+    # URL of your Notion Daily Log page
+    # Example: https://www.notion.so/your-workspace/Daily-Log-abc123
+    daily_log_url: ""
+
+  # Future integrations can be added here:
+  # slack:
+  #   enabled: false
+  #   channel: "#daily-updates"
+  #
+  # markdown:
+  #   enabled: false
+  #   output_dir: "~/daily-logs"

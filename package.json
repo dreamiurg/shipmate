@@ -1,0 +1,20 @@
+{
+  "name": "shipmate",
+  "version": "1.0.0",
+  "description": "Claude Code plugin for tracking what you ship",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dreamiurg/shipmate.git"
+  },
+  "keywords": ["claude-code", "github", "productivity", "standup"],
+  "author": "dreamiurg",
+  "license": "MIT",
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "conventional-changelog-conventionalcommits": "^7.0.2",
+    "semantic-release": "^23.0.0"
+  }
+}

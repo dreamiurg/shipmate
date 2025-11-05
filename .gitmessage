@@ -1,0 +1,21 @@
+# <type>: <subject>
+#
+# <body>
+#
+# <footer>
+#
+# Type should be one of:
+#   feat:     New feature
+#   fix:      Bug fix
+#   docs:     Documentation changes
+#   style:    Code style changes (formatting, etc)
+#   refactor: Code refactoring
+#   test:     Test changes
+#   chore:    Build/tooling changes
+#
+# Subject should be imperative, present tense, lowercase, no period at end
+#
+# Body should include motivation for the change and contrast with previous behavior
+#
+# Footer should reference issues (e.g., "Closes #123") or note breaking changes
+# (e.g., "BREAKING CHANGE: API endpoint removed")
