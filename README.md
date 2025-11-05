@@ -98,12 +98,12 @@ Post your daily summary to a Notion Daily Log page. See [integrations/notion/REA
 
 Shipmate uses two specialized agents:
 
-1. **shipmate:github-analyzer-agent** (Haiku)
+1. **github-analyzer-agent** (Haiku)
    - Runs parallel GitHub CLI queries
    - Extracts commits, issues, PRs from last 24 hours
    - Returns structured JSON data
 
-2. **shipmate:summarizer-agent** (Sonnet)
+2. **summarizer-agent** (Sonnet)
    - Analyzes activity data
    - Identifies themes and insights
    - Writes conversational summaries
@@ -128,7 +128,7 @@ This separation keeps data extraction fast and cheap while using a more capable 
 
 ### Change Summary Format
 
-Edit `agents/shipmate:summarizer-agent.md` to customize:
+Edit `agents/summarizer-agent.md` to customize:
 
 - Tone and style
 - Output structure
@@ -136,7 +136,7 @@ Edit `agents/shipmate:summarizer-agent.md` to customize:
 
 ### Change Data Sources
 
-Edit `agents/shipmate:github-analyzer-agent.md` to:
+Edit `agents/github-analyzer-agent.md` to:
 
 - Add more GitHub queries
 - Include different time ranges
@@ -204,8 +204,8 @@ shipmate/
 │   └── shipmate:end-of-day-summary/
 │       └── SKILL.md                   # Main orchestration skill
 ├── agents/
-│   ├── shipmate:github-analyzer-agent.md   # Data extraction
-│   └── shipmate:summarizer-agent.md        # Summary writing
+│   ├── github-analyzer-agent.md   # Data extraction
+│   └── summarizer-agent.md        # Summary writing
 ├── commands/
 │   └── shipmate:eod.md                # Slash command shortcut
 ├── integrations/
@@ -255,7 +255,7 @@ After modifying files in your local checkout:
 
    ```bash
    cp skills/shipmate:end-of-day-summary/SKILL.md ~/.claude/skills/shipmate:end-of-day-summary/
-   cp agents/shipmate:*.md ~/.claude/agents/
+   cp agents/*.md ~/.claude/agents/
    ```
 
 2. Test with `/shipmate:eod`

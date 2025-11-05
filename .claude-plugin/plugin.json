@@ -23,8 +23,8 @@
     "./skills/shipmate:end-of-day-summary"
   ],
   "agents": [
-    "./agents/shipmate:github-analyzer-agent.md",
-    "./agents/shipmate:summarizer-agent.md"
+    "./agents/github-analyzer-agent.md",
+    "./agents/summarizer-agent.md"
   ],
   "commands": [
     "./commands/shipmate:eod.md"
