@@ -1,5 +1,5 @@
 ---
-name: shipmate:github-analyzer-agent
+name: github-analyzer-agent
 description: Extracts GitHub activity data (commits, issues, PRs) for a specified date range and scope
 tools: Bash
 model: haiku

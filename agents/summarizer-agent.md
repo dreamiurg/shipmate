@@ -1,5 +1,5 @@
 ---
-name: shipmate:summarizer-agent
+name: summarizer-agent
 description: Creates conversational team standup summaries from GitHub activity data
 tools: None
 model: sonnet

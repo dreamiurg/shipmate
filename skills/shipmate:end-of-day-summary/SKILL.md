@@ -9,8 +9,8 @@ This skill orchestrates two specialized agents to generate a concise summary of 
 
 ## What This Skill Does
 
-1. **Extracts GitHub activity data** using the `shipmate:github-analyzer-agent` agent
-2. **Generates a beautiful summary** using the `shipmate:summarizer-agent` agent
+1. **Extracts GitHub activity data** using the `github-analyzer-agent` agent
+2. **Generates a beautiful summary** using the `summarizer-agent` agent
 
 The result is a conversational, scannable update perfect for sharing with teammates.
 
@@ -59,7 +59,7 @@ Store the user's selection.
 
 ### Step 3: Invoke GitHub Analyzer Agent
 
-Use the Task tool to invoke the `shipmate:github-analyzer-agent` agent:
+Use the Task tool to invoke the `shipmate:github-analyzer-agent` agent (subagent_type="shipmate:github-analyzer-agent"):
 
 ```text
 Please extract GitHub activity data for the last 24 hours with the following scope: [user's selection from Step 2]
@@ -120,7 +120,7 @@ Store the user's selections (2-4 topics).
 
 ### Step 6: Invoke Activity Summarizer Agent
 
-Use the Task tool to invoke the `shipmate:summarizer-agent` agent:
+Use the Task tool to invoke the `shipmate:summarizer-agent` agent (subagent_type="shipmate:summarizer-agent"):
 
 ```text
 Please create a team standup summary from this GitHub activity data:
@@ -217,14 +217,14 @@ If Notion integration is enabled in config:
 
 ## Agent Roles
 
-### shipmate:github-analyzer-agent
+### github-analyzer-agent
 
 - **Specialty**: GitHub CLI (`gh`) expertise
 - **Tools**: Bash
 - **Model**: Haiku (fast, cost-effective for data extraction)
 - **Output**: Structured JSON data about commits, issues, PRs
 
-### shipmate:summarizer-agent
+### summarizer-agent
 
 - **Specialty**: Writing conversational, scannable summaries
 - **Tools**: None (pure analysis and writing)
@@ -259,13 +259,13 @@ If Notion integration is enabled in config:
 
 ## Error Handling
 
-If the shipmate:github-analyzer-agent fails:
+If the github-analyzer-agent fails:
 
 - Check `gh auth status`
 - Verify `gh` CLI is installed (requires 2.23.0+)
 - Verify organization membership for org-scoped queries
 
-If the shipmate:summarizer-agent produces unexpected format:
+If the summarizer-agent produces unexpected format:
 
 - Ensure you passed complete raw data from analyzer
 - Verify the analyzer included issue bodies for closed issues
@@ -274,8 +274,8 @@ If the shipmate:summarizer-agent produces unexpected format:
 
 To customize:
 
-- Edit `agents/shipmate:github-analyzer-agent.md` for different data sources
-- Edit `agents/shipmate:summarizer-agent.md` for different summary formats
+- Edit `agents/github-analyzer-agent.md` for different data sources
+- Edit `agents/summarizer-agent.md` for different summary formats
 - Modify this skill to change orchestration logic
 - Add new integrations in `integrations/` directory
 
@@ -288,7 +288,7 @@ Skill: [Detects orgs: example-org]
 Skill: [Asks user: "Personal, example-org, or all?"]
 User: "example-org"
 
-Skill: [Invokes shipmate:github-analyzer-agent]
+Skill: [Invokes github-analyzer-agent]
 Analyzer: [Runs 5 parallel gh queries, returns JSON]
 
 Skill: [Analyzes data, identifies themes]
@@ -304,7 +304,7 @@ Themes identified:
 
 User: [Selects: AWS, Railway, Auth0, Deployment process]
 
-Skill: [Invokes shipmate:summarizer-agent with data + selected topics]
+Skill: [Invokes summarizer-agent with data + selected topics]
 Summarizer: [Creates summary with 4 main bullets + Housekeeping group]
 
 Skill: [Presents summary to user]
@@ -317,8 +317,8 @@ Skill: "Posted to Notion Daily Log!" (if applicable)
 
 This skill uses:
 
-- `agents/shipmate:github-analyzer-agent.md` - Data extraction agent
-- `agents/shipmate:summarizer-agent.md` - Summary writing agent
+- `agents/github-analyzer-agent.md` - Data extraction agent
+- `agents/summarizer-agent.md` - Summary writing agent
 - `skills/shipmate:end-of-day-summary/SKILL.md` - This orchestration skill
 - `commands/shipmate:eod.md` - Slash command shortcut
 - `integrations/notion/` - Optional Notion integration
