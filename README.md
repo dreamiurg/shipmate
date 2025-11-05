@@ -1,5 +1,7 @@
 # Shipmate
 
+[![Release Version](https://img.shields.io/github/v/release/dreamiurg/shipmate)](https://github.com/dreamiurg/shipmate/releases/latest)
+
 > Your daily dev sidekick for tracking what you ship
 
 Shipmate generates conversational end-of-day summaries from your GitHub activity. Perfect for team standups, personal logs, or just remembering what you accomplished today.
