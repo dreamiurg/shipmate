@@ -273,3 +273,7 @@ MIT License - see [LICENSE](LICENSE) for details
 Created by [@dreamiurg](https://github.com/dreamiurg)
 
 Built for [Claude Code](https://docs.claude.com/claude-code)
+
+## Release Process
+
+This project uses automated semantic versioning. Releases are automatically created when commits are pushed to the main branch using conventional commit format.
