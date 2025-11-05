@@ -26,15 +26,15 @@ Return structured data about:
 
 ### Date Range Handling
 
-GitHub search interprets dates as UTC. To get the last 24 hours:
+GitHub search interprets dates as UTC. To get the last 24 hours, calculate the timestamp inline using command substitution:
 
 ```bash
-LAST_24H=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)
+gh search prs --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" ...
 ```
 
-This calculates exactly 24 hours ago from the current time in UTC format.
+This calculates exactly 24 hours ago from the current time in UTC format and embeds it directly in the gh command.
 
-Use this in all date queries to ensure all activity from the last 24 hours is included.
+Use this inline date calculation in all date queries to ensure all activity from the last 24 hours is included.
 
 ### Parallel Execution
 
@@ -46,53 +46,53 @@ Use this in all date queries to ensure all activity from the last 24 hours is in
 
 ```bash
 # For organization:
-gh search commits --owner {org_name} --author @me --committer-date ">=$LAST_24H" --json commit,repository,sha,author,committer --limit 100
+gh search commits --owner {org_name} --author @me --committer-date ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json commit,repository,sha,author,committer --limit 100
 
 # For personal (filter by username):
-gh search commits --author @me --committer-date ">=$LAST_24H" --json commit,repository,sha,author,committer --limit 100 | jq '[.[] | select(.repository.owner.login == "{username}")]'
+gh search commits --author @me --committer-date ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json commit,repository,sha,author,committer --limit 100 | jq '[.[] | select(.repository.owner.login == "{username}")]'
 
 # For all:
-gh search commits --author @me --committer-date ">=$LAST_24H" --json commit,repository,sha,author,committer --limit 100
+gh search commits --author @me --committer-date ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json commit,repository,sha,author,committer --limit 100
 ```
 
 **Query 2 - Issues Created:**
 
 ```bash
 # For organization:
-gh search issues --owner {org_name} --author @me --created ">=$LAST_24H" --json number,title,state,url,repository --limit 100
+gh search issues --owner {org_name} --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository --limit 100
 
 # For personal/all:
-gh search issues --author @me --created ">=$LAST_24H" --json number,title,state,url,repository --limit 100
+gh search issues --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository --limit 100
 ```
 
 **Query 3 - Issues Closed:**
 
 ```bash
 # For organization:
-gh search issues --owner {org_name} --author @me --closed ">=$LAST_24H" --json number,title,state,url,repository,closedAt --limit 100
+gh search issues --owner {org_name} --author @me --closed ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository,closedAt --limit 100
 
 # For personal/all:
-gh search issues --author @me --closed ">=$LAST_24H" --json number,title,state,url,repository,closedAt --limit 100
+gh search issues --author @me --closed ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository,closedAt --limit 100
 ```
 
 **Query 4 - PRs Created:**
 
 ```bash
 # For organization:
-gh search prs --owner {org_name} --author @me --created ">=$LAST_24H" --json number,title,state,url,repository --limit 100
+gh search prs --owner {org_name} --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository --limit 100
 
 # For personal/all:
-gh search prs --author @me --created ">=$LAST_24H" --json number,title,state,url,repository --limit 100
+gh search prs --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository --limit 100
 ```
 
 **Query 5 - PRs Updated:**
 
 ```bash
 # For organization:
-gh search prs --owner {org_name} --author @me --updated ">=$LAST_24H" --json number,title,state,url,repository,updatedAt --limit 100
+gh search prs --owner {org_name} --author @me --updated ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository,updatedAt --limit 100
 
 # For personal/all:
-gh search prs --author @me --updated ">=$LAST_24H" --json number,title,state,url,repository,updatedAt --limit 100
+gh search prs --author @me --updated ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository,updatedAt --limit 100
 ```
 
 ### Scope Filtering
