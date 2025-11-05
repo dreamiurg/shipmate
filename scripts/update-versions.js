@@ -26,7 +26,7 @@ fs.writeFileSync(marketplaceJsonPath, JSON.stringify(marketplaceJson, null, 2) +
 console.log(`✓ Updated ${marketplaceJsonPath}`);
 
 // Update SKILL.md footer (add version info if it doesn't exist)
-const skillMdPath = path.join(__dirname, '..', 'skills', 'shipmate:end-of-day-summary', 'SKILL.md');
+const skillMdPath = path.join(__dirname, '..', 'skills', 'eod', 'SKILL.md');
 let skillMd = fs.readFileSync(skillMdPath, 'utf8');
 
 // Check if version footer exists
