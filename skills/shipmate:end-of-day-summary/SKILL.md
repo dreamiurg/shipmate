@@ -303,3 +303,9 @@ This skill uses:
 - `skills/shipmate:end-of-day-summary/SKILL.md` - This orchestration skill
 - `commands/shipmate:eod.md` - Slash command shortcut
 - `integrations/notion/` - Optional Notion integration
+
+
+---
+
+**Version:** --help  
+**Last Updated:** 2025-11-05
