@@ -5,6 +5,12 @@ repos:
       - id: no-commit-to-branch
         name: Prevent commits to main branch
         args: ['--branch', 'main']
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.2.1
+    hooks:
+      - id: commitizen
+        name: Validate commit message format
+        stages: [commit-msg]
   - repo: local
     hooks:
       - id: gitleaks
@@ -22,3 +28,8 @@ repos:
         language: system
         types: [markdown]
         pass_filenames: true
+
+# Global settings
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+fail_fast: false

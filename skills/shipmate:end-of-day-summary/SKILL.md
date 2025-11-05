@@ -27,37 +27,67 @@ This skill can be configured via `shipmate.yaml` in either:
 
 See `config.example.yaml` for configuration options.
 
+## MANDATORY FIRST STEP: Create Todo List
+
+**BEFORE DOING ANYTHING ELSE**, you MUST use the TodoWrite tool to create a task list with these EXACT step names:
+
+1. "Detect GitHub organizations and username"
+2. "Ask user to select activity scope"
+3. "Extract GitHub activity data"
+4. "Analyze activity and identify themes"
+5. "Ask user to select main topics"
+6. "Generate conversational summary"
+7. "Present summary to user"
+8. "Post to enabled integrations (if configured)"
+
+Mark the first todo as `in_progress` immediately after creating the list.
+
+**Why:** This provides visibility to the user and ensures consistent progress tracking across all skill runs.
+
 ## Process
 
-### Step 1: Detect GitHub Organizations
+### Step 1: Detect GitHub Organizations (MANDATORY - DO NOT SKIP)
 
-Check if the user belongs to multiple organizations:
+**CRITICAL:** You MUST complete this step before proceeding. Do NOT jump to Step 3.
+
+Run these commands to detect organizations and get the username:
 
 ```bash
 gh api user/orgs --jq '.[].login'
 ```
 
-Also get the username:
-
 ```bash
 gh api user --jq '.login'
 ```
 
-### Step 2: Ask User for Scope
+Store both the list of organizations and the username.
 
-Use the AskUserQuestion tool to ask:
+### Step 2: Ask User for Scope (MANDATORY - DO NOT SKIP)
+
+**CRITICAL:** You MUST ask the user which scope they want. Do NOT assume or skip this step.
+
+Use the AskUserQuestion tool with this EXACT question:
 
 **Question:** "Which GitHub activity would you like to include in your end-of-day summary?"
 
-Options:
+**Options** (create one option for each scenario):
 
-- **Personal account only** ({username})
-- **Organization: {org_name}** (one option per org discovered)
-- **All accounts** (personal + all organizations)
+- **Personal account only** ({username}) - "Only activity from your personal GitHub account"
+- **Organization: {org_name}** - "Only activity from the {org_name} organization" (one option per org discovered)
+- **All accounts** - "Activity from your personal account and all organizations"
 
-Store the user's selection.
+**IMPORTANT:**
+
+- If the user belongs to multiple organizations, include one option for EACH organization
+- Always include the "Personal account only" option
+- Always include the "All accounts" option
+- Do NOT proceed to Step 3 until the user has made a selection
+
+Store the user's selection for use in Step 3.
 
 ### Step 3: Invoke GitHub Analyzer Agent
+
+**Mark todo #2 as completed and todo #3 as in_progress.**
 
 Use the Task tool to invoke the `shipmate:github-analyzer-agent` agent (subagent_type="shipmate:github-analyzer-agent"):
 
@@ -79,7 +109,11 @@ Use parallel queries for performance.
 - Ask for parallel execution
 - The agent will return structured JSON data
 
+Once the agent returns data, mark todo #3 as completed.
+
 ### Step 4: Analyze Activity and Identify Key Themes
+
+**Mark todo #4 as in_progress.**
 
 Review the data from Step 3 and identify distinct themes/topics based on:
 
@@ -99,7 +133,11 @@ For each theme, create a clear, descriptive label like:
 
 **IMPORTANT**: Identify ALL distinct themes, not just major ones. Include both substantial investigations and smaller tasks.
 
+Once themes are identified, mark todo #4 as completed.
+
 ### Step 5: Ask User to Select Main Topics
+
+**Mark todo #5 as in_progress.**
 
 Use the AskUserQuestion tool with multiSelect enabled:
 
@@ -118,7 +156,11 @@ Example:
 
 Store the user's selections (2-4 topics).
 
+Once the user has made their selections, mark todo #5 as completed.
+
 ### Step 6: Invoke Activity Summarizer Agent
+
+**Mark todo #6 as in_progress.**
 
 Use the Task tool to invoke the `shipmate:summarizer-agent` agent (subagent_type="shipmate:summarizer-agent"):
 
@@ -144,13 +186,21 @@ Generate a conversational summary following the format with:
 - Everything NOT selected should be grouped into "Housekeeping"
 - The agent will return the formatted summary
 
+Once the agent returns the summary, mark todo #6 as completed.
+
 ### Step 7: Present Summary to User
+
+**Mark todo #7 as in_progress.**
 
 Display the summary returned by the summarizer agent.
 
 **Optional Polish**: If the `elements-of-style:writing-clearly-and-concisely` skill is available, you may optionally use it to polish the summary further, but the summarizer agent already applies these principles.
 
+Once the summary is displayed, mark todo #7 as completed.
+
 ### Step 8: Check for Enabled Integrations
+
+**Mark todo #8 as in_progress.**
 
 Check the `shipmate.yaml` configuration for enabled integrations under the `integrations` section.
 
@@ -159,7 +209,7 @@ For each enabled integration, proceed to the appropriate step:
 - If `integrations.notion.enabled: true`, proceed to Step 9
 - If other integrations are enabled in the future, handle them here
 
-If no integrations are enabled, you're done.
+If no integrations are enabled, mark todo #8 as completed and you're done.
 
 ### Step 9: Post to Notion Daily Log (if enabled)
 
@@ -196,6 +246,8 @@ If Notion integration is enabled in config:
 1. If the page already has content, prepend the new entry at the top (most recent first)
 2. If the page is blank, just add the new entry
 3. Use the `mcp__notion__notion-update-page` tool with appropriate command (`replace_content` or `insert_content_after`)
+
+Once posted to Notion (or if Notion is not enabled), mark todo #8 as completed.
 
 **Example of final Notion format**:
 
