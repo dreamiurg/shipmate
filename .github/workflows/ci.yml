@@ -1,19 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-    # Skip CI for docs-only and metadata changes on push to main
-    paths-ignore:
-      - '**.md'
-      - 'docs/**'
-      - 'examples/**'
-      - '.github/**'
-      - '!.github/workflows/**'
-      - '.gitignore'
   pull_request:
     branches: [main]
-    # Always run on PRs (for review)
+    # Run on all PRs to main for code review
 
 # Cancel in-progress runs when a new workflow with the same group name starts
 concurrency:
