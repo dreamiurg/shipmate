@@ -1,5 +1,5 @@
 ---
-name: shipmate:end-of-day-summary
+name: eod
 description: Generate a concise end-of-day summary from GitHub activity in the last 24 hours - commits, issues, and PRs
 ---
 
