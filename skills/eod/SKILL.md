@@ -16,7 +16,9 @@ The result is a conversational, scannable update perfect for sharing with teamma
 
 ## Usage
 
-Simply invoke this skill: `/shipmate:eod` or use the Skill tool with `shipmate:eod`.
+Ask Claude naturally: "Generate my end-of-day summary"
+
+Or invoke directly with the Skill tool: `shipmate:eod`
 
 ## Configuration
 
