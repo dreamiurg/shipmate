@@ -11,6 +11,61 @@
 
 Shipmate is a [Claude Code](https://docs.claude.com/claude-code) plugin that generates conversational end-of-day summaries from your GitHub activity. Perfect for team standups, personal logs, or just remembering what you accomplished today.
 
+```markdown
+
+ ▐▛███▜▌   Claude Code v2.0.34
+▝▜█████▛▘  Sonnet 4.5 · Claude Max
+  ▘▘ ▝▝    /tmp
+
+> Generate my end-of-day summary
+
+⏺ I'm using the shipmate:eod skill to generate an end-of-day summary.
+⏺ I'll generate your end-of-day summary. Let me start by creating a task list to track our
+  progress.
+⏺ Now let me detect your GitHub organizations and username.
+
+...
+
+⏺ User answered Claude's questions:
+  ⎿  · Which GitHub activity would you like to include in your end-of-day summary? → Personal
+     account only (dreamiurg)
+
+⏺ shipmate:github-analyzer-agent(Extract GitHub activity data)
+  ⎿  Done (7 tool uses · 26.6k tokens · 1m 42s)
+
+⏺ User answered Claude's questions:
+  ⎿  · Which topics should be highlighted as main accomplishments? (Select 2-4. Everything else
+     will be grouped as 'Housekeeping') → Fixed Shipmate plugin naming and registration issues,
+     Wrote blog post about Shipmate development
+
+⏺ shipmate:summarizer-agent(Generate conversational summary)
+  ⎿  Done (0 tool uses · 6.4k tokens · 13.5s)
+
+⏺ Here's your end-of-day summary:
+Daily Update - November 5, 2025
+
+- **Fixed Shipmate plugin naming and registration issues** - Spent some time debugging why the Shipmate
+plugin kept triple-invoking itself. Turns out Claude Desktop’s plugin system auto-prefixes skill
+names with the plugin name, so having both a slash command AND a skill with overlapping names was
+causing conflicts. The skill was being called three different ways at once. Fixed it by removing the
+slash command entirely and renaming the skill directory to match the expected registration name. Also
+had to chase down a bunch of related issues - duplicate namespace prefixes, incorrect script paths
+after the directory rename, and the version footer not updating properly. Got it all working and
+released version 1.1.8 (https://github.com/dreamiurg/shipmate/releases/tag/v1.1.8)
+
+- **Wrote blog post about Shipmate development** - Documented the journey of building the Shipmate
+end-of-day summary skill, from initial idea through the naming issues I ran into today. Focused on
+the process and what I learned about Claude Desktop’s plugin system - how it handles skill
+registration, the auto-prefixing behavior, and why slash commands can collide with skill names. Also
+added a style guide to my blog that emphasizes intellectual honesty and process-focused narrative,
+inspired by writing principles of the blog authors I follow.
+
+- **Housekeeping** - Set up pre-commit hooks for several repos (gitleaks for secrets, markdownlint for
+documentation quality, conventional commits for PR titles), added CI workflow to Shipmate with
+badges for build status and latest release, configured branch protection, updated documentation to
+reference the main branch instead of master, and cleaned up some stale tool version files.
+```
+
 ## Installation
 
 ### Prerequisites
