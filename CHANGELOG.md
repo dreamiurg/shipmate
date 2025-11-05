@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/dreamiurg/shipmate/compare/v1.1.3...v1.1.4) (2025-11-05)
+
+
+### Bug Fixes
+
+* resolve slash command and skill name collision ([#12](https://github.com/dreamiurg/shipmate/issues/12)) ([6951656](https://github.com/dreamiurg/shipmate/commit/6951656480760769bf2636d3dea6a165381fed7c))
+
 ## [1.1.3](https://github.com/dreamiurg/shipmate/compare/v1.1.2...v1.1.3) (2025-11-05)
 
 
