@@ -1,3 +1,17 @@
+## [1.1.8](https://github.com/dreamiurg/shipmate/compare/v1.1.7...v1.1.8) (2025-11-05)
+
+
+### Bug Fixes
+
+* use inline date substitution to enable command pre-approval ([#18](https://github.com/dreamiurg/shipmate/issues/18)) ([aff4bc6](https://github.com/dreamiurg/shipmate/commit/aff4bc663d269dd5d01654a4c49de14ca001a684))
+
+## [1.1.7](https://github.com/dreamiurg/shipmate/compare/v1.1.6...v1.1.7) (2025-11-05)
+
+
+### Bug Fixes
+
+* run CI only on pull requests, not on push to main ([#16](https://github.com/dreamiurg/shipmate/issues/16)) ([783f70f](https://github.com/dreamiurg/shipmate/commit/783f70ffb259de178e211f356b2f85cfa700a812))
+
 ## [1.1.6](https://github.com/dreamiurg/shipmate/compare/v1.1.5...v1.1.6) (2025-11-05)
 
 
