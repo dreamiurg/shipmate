@@ -44,10 +44,16 @@ You should see `shipmate:end-of-day-summary` listed.
 
 ## Usage
 
-Simply run the end-of-day command:
+Ask Claude to generate your end-of-day summary:
 
-```bash
-/shipmate:eod
+```text
+"Generate my end-of-day summary"
+```
+
+Or directly invoke the skill using the Skill tool:
+
+```text
+Use the shipmate:eod skill
 ```
 
 The skill will:
