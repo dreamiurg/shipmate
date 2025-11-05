@@ -1,5 +1,5 @@
 ---
-name: end-of-day-summary
+name: eod
 description: Generate a concise end-of-day summary from GitHub activity in the last 24 hours - commits, issues, and PRs
 ---
 
@@ -16,7 +16,7 @@ The result is a conversational, scannable update perfect for sharing with teamma
 
 ## Usage
 
-Simply invoke this skill: `/shipmate:eod` or use the Skill tool with `shipmate:end-of-day-summary`.
+Simply invoke this skill: `/shipmate:eod` or use the Skill tool with `shipmate:eod`.
 
 ## Configuration
 
