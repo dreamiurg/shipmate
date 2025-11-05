@@ -1,5 +1,5 @@
 ---
-name: shipmate:eod
+name: eod
 description: Generate end-of-day summary from GitHub activity
 ---
 
