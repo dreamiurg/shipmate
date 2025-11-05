@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/dreamiurg/shipmate/compare/v1.0.1...v1.0.2) (2025-11-05)
+
+
+### Bug Fixes
+
+* remove duplicate shipmate prefix in skill name ([#3](https://github.com/dreamiurg/shipmate/issues/3)) ([5cd924b](https://github.com/dreamiurg/shipmate/commit/5cd924b6bf8fe21be8bac26e2c69c7db6229dc2f))
+
 ## [1.0.1](https://github.com/dreamiurg/shipmate/compare/v1.0.0...v1.0.1) (2025-11-05)
 
 

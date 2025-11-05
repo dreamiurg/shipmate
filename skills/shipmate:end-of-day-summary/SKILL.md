@@ -307,5 +307,5 @@ This skill uses:
 
 ---
 
-**Version:** 1.0.1  
+**Version:** 1.0.2  
 **Last Updated:** 2025-11-05
