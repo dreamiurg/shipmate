@@ -1,3 +1,11 @@
+## [1.1.6](https://github.com/dreamiurg/shipmate/compare/v1.1.5...v1.1.6) (2025-11-05)
+
+
+### Bug Fixes
+
+* align skill directory name with skill name for proper registration ([#14](https://github.com/dreamiurg/shipmate/issues/14)) ([05d277b](https://github.com/dreamiurg/shipmate/commit/05d277b92db902530682a9550b8aed8f6671d5d1))
+* update script path after skill directory rename ([#15](https://github.com/dreamiurg/shipmate/issues/15)) ([7a226b1](https://github.com/dreamiurg/shipmate/commit/7a226b15a4a9ec6a0784edc2aa82025a16e6a78e)), closes [#14](https://github.com/dreamiurg/shipmate/issues/14)
+
 ## [1.1.5](https://github.com/dreamiurg/shipmate/compare/v1.1.4...v1.1.5) (2025-11-05)
 
 
