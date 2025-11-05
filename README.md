@@ -40,7 +40,7 @@ In any Claude Code session:
 "What skills are available?"
 ```
 
-You should see `shipmate:end-of-day-summary` listed.
+You should see `shipmate:eod` listed.
 
 ## Usage
 
