@@ -27,6 +27,6 @@
     "./agents/summarizer-agent.md"
   ],
   "commands": [
-    "./commands/shipmate:eod.md"
+    "./commands/eod.md"
   ]
 }
