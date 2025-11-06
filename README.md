@@ -1,10 +1,8 @@
 # Shipmate
 
 [![Release Version](https://img.shields.io/github/v/release/dreamiurg/shipmate)](https://github.com/dreamiurg/shipmate/releases/latest)
-[![CI](https://github.com/dreamiurg/shipmate/actions/workflows/ci.yml/badge.svg)](https://github.com/dreamiurg/shipmate/actions/workflows/ci.yml)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-5A67D8)](https://docs.claude.com/claude-code)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 > Your daily dev sidekick for tracking what you ship
@@ -65,6 +63,77 @@ documentation quality, conventional commits for PR titles), added CI workflow to
 badges for build status and latest release, configured branch protection, updated documentation to
 reference the main branch instead of master, and cleaned up some stale tool version files.
 ```
+
+## How It Works
+
+The shipmate:eod skill follows a multi-phase workflow to generate conversational end-of-day summaries:
+
+```mermaid
+graph TB
+    Start([User asks Claude for<br/>end-of-day summary]) --> Detect[Phase 1: GitHub Detection<br/>Scan for GitHub organizations<br/>and personal account]
+
+    Detect --> Scope{Multiple GitHub<br/>identities found?}
+    Scope -->|Yes| AskScope[Ask user which scope:<br/>Personal, Org, or All]
+    Scope -->|No| ExtractGH
+    AskScope --> ExtractGH
+
+    ExtractGH[Phase 2: GitHub Extraction<br/>github-analyzer-agent Haiku]
+    ExtractClaude[Phase 3: Claude Session Extraction<br/>claude-analyzer-agent Haiku]
+
+    ExtractGH --> ParallelGH[Run parallel GitHub CLI queries<br/>for last 24 hours]
+    ExtractClaude --> SearchSessions[Search ~/.claude/ directory<br/>for session history]
+
+    ParallelGH --> Commits[Commits<br/>gh search commits]
+    ParallelGH --> Issues[Issues<br/>gh search issues]
+    ParallelGH --> PRs[Pull Requests<br/>gh search prs]
+
+    Commits --> Correlate
+    Issues --> Correlate
+    PRs --> Correlate
+    SearchSessions --> Correlate
+
+    Correlate[Phase 4: Correlation<br/>Match sessions to GitHub activity<br/>by time proximity + project path]
+
+    Correlate --> Enrich[Enrich GitHub activities with<br/>related session context]
+
+    Enrich --> Analyze[Phase 5: Theme Analysis<br/>Identify topics and patterns<br/>from enriched activity data]
+
+    Analyze --> Select[Phase 6: Topic Selection<br/>Ask user to pick 2-4 main<br/>accomplishments]
+
+    Select --> Summarize[Phase 7: Summary Generation<br/>summarizer-agent Sonnet<br/>Weave in session insights]
+
+    Summarize --> Integrate{Integrations<br/>enabled?}
+
+    Integrate -->|Notion| Notion[Post to Notion<br/>Daily Log page]
+    Integrate -->|None| Display
+    Notion --> Display
+
+    Display[Phase 8: Display Summary<br/>Show formatted output to user]
+
+    Display --> End([User receives conversational<br/>daily update])
+
+    style Start fill:#e1f5ff
+    style End fill:#e1f5ff
+    style ExtractGH fill:#fff4e1
+    style ExtractClaude fill:#fff4e1
+    style ParallelGH fill:#fff4e1
+    style SearchSessions fill:#fff4e1
+    style Commits fill:#f0f0f0
+    style Issues fill:#f0f0f0
+    style PRs fill:#f0f0f0
+    style Correlate fill:#ffe8e8
+    style Summarize fill:#e8f5e9
+```
+
+**Key Features:**
+
+- **Two-Tier Agent Architecture**: Fast Haiku agents for data extraction, powerful Sonnet agent for narrative synthesis
+- **Parallel Extraction**: GitHub CLI queries run simultaneously; Claude sessions extracted independently
+- **Smart Correlation**: Matches Claude Code sessions to GitHub activities by time proximity (±2 hours) and project path
+- **Session Insights**: Reveals depth of work behind commits (duration, message count, file edits, bash commands)
+- **User Control**: You select which topics become main accomplishments vs housekeeping
+- **Graceful Degradation**: Continues with available data if sources fail; handles missing Claude session directory
+- **Multi-Integration Support**: Post summaries to Notion, with Slack and other integrations planned
 
 ## Installation
 
@@ -166,28 +235,6 @@ See [Claude Sessions Documentation](docs/CLAUDE_SESSIONS.md) for details.
 
 Post your daily summary to a Notion Daily Log page. See [integrations/notion/README.md](integrations/notion/README.md) for setup instructions.
 
-### Coming Soon
-
-- **Slack** - Post to team channels
-- **Markdown** - Save to local files
-- **Discord** - Share with communities
-
-## How It Works
-
-Shipmate uses two specialized agents:
-
-1. **github-analyzer-agent** (Haiku)
-   - Runs parallel GitHub CLI queries
-   - Extracts commits, issues, PRs from last 24 hours
-   - Returns structured JSON data
-
-2. **summarizer-agent** (Sonnet)
-   - Analyzes activity data
-   - Identifies themes and insights
-   - Writes conversational summaries
-
-This separation keeps data extraction fast and cheap while using a more capable model for nuanced writing.
-
 ## Example Output
 
 ```markdown
@@ -226,140 +273,10 @@ Edit `agents/github-analyzer-agent.md` to:
 2. Add integration config to `config.example.yaml`
 3. Update `skills/shipmate:end-of-day-summary/SKILL.md` Step 8 to handle the new integration
 
-## Troubleshooting
-
-### "gh: command not found"
-
-Install GitHub CLI:
-
-```bash
-# macOS
-brew install gh
-
-# Windows
-winget install GitHub.cli
-
-# Linux
-See https://github.com/cli/cli#installation
-```
-
-### "gh authentication required"
-
-Authenticate with GitHub:
-
-```bash
-gh auth login
-```
-
-### "No activity found"
-
-- Check that you've committed, created issues, or opened PRs in the last 24 hours
-- Verify your GitHub scope includes the repositories where you worked
-- Try `gh search commits --author @me --limit 5` to verify CLI access
-
-### Configuration not loading
-
-- Verify config file is at `~/.claude/shipmate.yaml` or `<project>/.claude/shipmate.yaml`
-- Check YAML syntax (indentation matters!)
-- Make sure file is named exactly `shipmate.yaml` (not `shipmate.yml`)
-
-## Development
-
-### Repository Structure
-
-```text
-shipmate/
-├── README.md                          # This file
-├── LICENSE                            # MIT License
-├── CHANGELOG.md                       # Release history
-├── package.json                       # NPM metadata for releases
-├── config.example.yaml                # Configuration template
-├── .claude-plugin/
-│   ├── plugin.json                   # Plugin metadata
-│   ├── marketplace.json              # Marketplace listing
-│   └── hooks.json                    # Plugin hooks (empty)
-├── skills/
-│   └── shipmate:end-of-day-summary/
-│       └── SKILL.md                   # Main orchestration skill
-├── agents/
-│   ├── github-analyzer-agent.md   # Data extraction
-│   └── summarizer-agent.md        # Summary writing
-├── commands/
-│   └── shipmate:eod.md                # Slash command shortcut
-├── integrations/
-│   └── notion/
-│       └── README.md                  # Notion setup guide
-├── scripts/
-│   └── update-versions.js            # Semantic release version updater
-└── .github/
-    └── workflows/
-        └── release.yml               # Automated releases
-```
-
-### Release Management
-
-This project uses [semantic-release](https://semantic-release.gitbook.io/) for automated versioning and releases.
-
-**Commit Message Format:**
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat:` - New feature (triggers minor version bump)
-- `fix:` - Bug fix (triggers patch version bump)
-- `docs:` - Documentation changes
-- `chore:` - Maintenance tasks
-- `refactor:` - Code refactoring
-- `test:` - Test changes
-
-**Breaking Changes:**
-Add `BREAKING CHANGE:` in commit body or use `!` after type (e.g., `feat!:`) to trigger a major version bump.
-
-**Release Process:**
-
-1. Commit changes using conventional commit format
-2. Push to `main` branch
-3. GitHub Actions automatically:
-   - Analyzes commits
-   - Determines version bump
-   - Updates version in all files
-   - Generates CHANGELOG
-   - Creates GitHub release
-   - Tags the release
-
-### Testing Changes
-
-After modifying files in your local checkout:
-
-1. Copy updated files to `~/.claude/`:
-
-   ```bash
-   cp skills/shipmate:end-of-day-summary/SKILL.md ~/.claude/skills/shipmate:end-of-day-summary/
-   cp agents/*.md ~/.claude/agents/
-   ```
-
-2. Test with `/shipmate:eod`
-
-3. Check agent behavior independently using the Task tool in Claude Code
-
 ## Contributing
 
-This is currently a private repository for early testing. If you have access:
-
-1. Create a branch for your changes
-2. Use conventional commit messages
-3. Test thoroughly with `/shipmate:eod`
-4. Open a PR with a clear description
-5. Tag @dreamiurg for review
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local development setup, testing, and contribution guidelines.
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details
-
-## Credits
-
-Created by [@dreamiurg](https://github.com/dreamiurg)
-
-Built for [Claude Code](https://docs.claude.com/claude-code)
-
-## Release Process
-
-This project uses automated semantic versioning. Releases are automatically created when commits are pushed to the main branch using conventional commit format.

@@ -1,0 +1,6 @@
+[tools]
+node = "22"
+gitleaks = "latest"
+
+[env]
+_.file = ".env"

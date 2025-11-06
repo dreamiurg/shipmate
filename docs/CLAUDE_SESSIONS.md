@@ -45,14 +45,17 @@ claude_sessions:
 ## Troubleshooting
 
 **No sessions appear:**
+
 - Check `~/.claude/projects/` exists and contains `.jsonl` files
 - Verify `enabled: true` in config
 - Check time window (default 24 hours)
 
 **Wrong sessions matched:**
+
 - Adjust `correlation_window_hours` (default: 2)
 - Sessions match by project path + time proximity
 
 **Too many sessions:**
+
 - Increase `min_duration_minutes` (default: 2)
 - Sessions under threshold are filtered out

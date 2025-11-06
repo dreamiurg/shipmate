@@ -7,12 +7,14 @@ Extract Claude Code session history from the last 24 hours to reveal the depth o
 ## Input
 
 You receive:
+
 - `time_window_hours` (default: 24) - How far back to look
 - `min_duration_minutes` (default: 2) - Ignore sessions shorter than this
 
 ## Your Process
 
 1. **Invoke session parser**
+
    ```bash
    node scripts/parse-claude-sessions.js {time_window_hours} {min_duration_minutes}
    ```
@@ -23,6 +25,7 @@ You receive:
    - Never fail - always return valid JSON
 
 3. **Return JSON**
+
    ```json
    {
      "sessions": [
@@ -54,6 +57,7 @@ You receive:
 Always return valid JSON to stdout, even if no sessions found.
 
 Empty result:
+
 ```json
 {
   "sessions": [],

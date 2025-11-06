@@ -137,17 +137,20 @@ You may also receive `orphaned_sessions` (investigations without commits):
 ### How to Use Session Data
 
 **For activities with related_sessions:**
+
 - Mention depth of work if significant (>30 min total or >20 messages)
 - Use natural phrases: "after debugging", "through several iterations", "deep dive into"
 - Apply judgment—not every session needs explicit mention
 - Example: "Fixed authentication bug after debugging session tracking down token refresh logic"
 
 **For orphaned_sessions:**
+
 - Include as investigation or exploration work
 - Frame positively: "explored", "investigated", "researched"
 - Example: "Investigated performance issues in API gateway, though no commits resulted yet"
 
 **When NOT to mention sessions:**
+
 - Very short sessions (<10 minutes)
 - Simple changes that don't benefit from context
 - When it would make narrative awkward
