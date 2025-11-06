@@ -74,30 +74,33 @@ graph TB
 
     Detect --> Scope{Multiple GitHub<br/>identities found?}
     Scope -->|Yes| AskScope[Ask user which scope:<br/>Personal, Org, or All]
-    Scope -->|No| Extract
-    AskScope --> Extract
+    Scope -->|No| ExtractGH
+    AskScope --> ExtractGH
 
-    Extract[Phase 2: Activity Extraction<br/>github-analyzer-agent Haiku]
+    ExtractGH[Phase 2: GitHub Extraction<br/>github-analyzer-agent Haiku]
+    ExtractClaude[Phase 3: Claude Session Extraction<br/>claude-analyzer-agent Haiku]
 
-    Extract --> Parallel[Run parallel GitHub CLI queries<br/>for last 24 hours]
+    ExtractGH --> ParallelGH[Run parallel GitHub CLI queries<br/>for last 24 hours]
+    ExtractClaude --> SearchSessions[Search ~/.claude/ directory<br/>for session history]
 
-    Parallel --> Commits[Commits<br/>gh search commits]
-    Parallel --> Issues[Issues<br/>gh search issues]
-    Parallel --> PRs[Pull Requests<br/>gh search prs]
-    Parallel --> Sessions[Claude Sessions<br/>episodic-memory search]
+    ParallelGH --> Commits[Commits<br/>gh search commits]
+    ParallelGH --> Issues[Issues<br/>gh search issues]
+    ParallelGH --> PRs[Pull Requests<br/>gh search prs]
 
     Commits --> Correlate
     Issues --> Correlate
     PRs --> Correlate
-    Sessions --> Correlate
+    SearchSessions --> Correlate
 
-    Correlate[Phase 3: Session Correlation<br/>Match Claude sessions to commits<br/>by time proximity]
+    Correlate[Phase 4: Correlation<br/>Match sessions to GitHub activity<br/>by time proximity + project path]
 
-    Correlate --> Analyze[Phase 4: Theme Analysis<br/>Identify topics and patterns<br/>from activity data]
+    Correlate --> Enrich[Enrich GitHub activities with<br/>related session context]
 
-    Analyze --> Select[Phase 5: Topic Selection<br/>Ask user to pick 2-4 main<br/>accomplishments]
+    Enrich --> Analyze[Phase 5: Theme Analysis<br/>Identify topics and patterns<br/>from enriched activity data]
 
-    Select --> Summarize[Phase 6: Summary Generation<br/>summarizer-agent Sonnet<br/>Write conversational narrative]
+    Analyze --> Select[Phase 6: Topic Selection<br/>Ask user to pick 2-4 main<br/>accomplishments]
+
+    Select --> Summarize[Phase 7: Summary Generation<br/>summarizer-agent Sonnet<br/>Weave in session insights]
 
     Summarize --> Integrate{Integrations<br/>enabled?}
 
@@ -105,28 +108,31 @@ graph TB
     Integrate -->|None| Display
     Notion --> Display
 
-    Display[Phase 7: Display Summary<br/>Show formatted output to user]
+    Display[Phase 8: Display Summary<br/>Show formatted output to user]
 
     Display --> End([User receives conversational<br/>daily update])
 
     style Start fill:#e1f5ff
     style End fill:#e1f5ff
-    style Extract fill:#fff4e1
-    style Parallel fill:#fff4e1
+    style ExtractGH fill:#fff4e1
+    style ExtractClaude fill:#fff4e1
+    style ParallelGH fill:#fff4e1
+    style SearchSessions fill:#fff4e1
     style Commits fill:#f0f0f0
     style Issues fill:#f0f0f0
     style PRs fill:#f0f0f0
-    style Sessions fill:#f0f0f0
+    style Correlate fill:#ffe8e8
     style Summarize fill:#e8f5e9
 ```
 
 **Key Features:**
 
-- **Two-Tier Agent Architecture**: Fast Haiku agent for data extraction, powerful Sonnet agent for narrative synthesis
-- **Parallel Execution**: Phase 2 runs multiple GitHub CLI queries simultaneously for speed
-- **Session Correlation**: Matches Claude Code sessions to commits by time proximity to reveal work depth
+- **Two-Tier Agent Architecture**: Fast Haiku agents for data extraction, powerful Sonnet agent for narrative synthesis
+- **Parallel Extraction**: GitHub CLI queries run simultaneously; Claude sessions extracted independently
+- **Smart Correlation**: Matches Claude Code sessions to GitHub activities by time proximity (±2 hours) and project path
+- **Session Insights**: Reveals depth of work behind commits (duration, message count, file edits, bash commands)
 - **User Control**: You select which topics become main accomplishments vs housekeeping
-- **Graceful Degradation**: Continues with available data if sources fail
+- **Graceful Degradation**: Continues with available data if sources fail; handles missing Claude session directory
 - **Multi-Integration Support**: Post summaries to Notion, with Slack and other integrations planned
 
 ## Installation
