@@ -1,81 +1,139 @@
-# Contributing
+# Contributing to Shipmate
 
-## Testing Changes Locally
+Thank you for your interest in contributing! This guide will help you get started.
 
-### Prerequisites
+## Quick Links
 
-- [Claude Code](https://docs.claude.com/claude-code) installed
-- [GitHub CLI (`gh`)](https://cli.github.com/) authenticated
-- Node.js (for session parser script)
+- [Report a bug](https://github.com/dreamiurg/shipmate/issues/new)
+- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Claude Code Documentation](https://docs.claude.com/claude-code)
+- [Semantic Versioning](https://semver.org/)
 
-### Setup
+## Local Development Setup
 
-1. **Clone the repository:**
+1. **Fork and Clone**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/shipmate.git
+   cd shipmate
+   ```
 
-```bash
-git clone https://github.com/dreamiurg/shipmate.git
-cd shipmate
+2. **Symlink to Claude Plugins Directory**
+   ```bash
+   mkdir -p ~/.claude/plugins
+   ln -s /path/to/shipmate ~/.claude/plugins/shipmate
+
+   # Verify
+   ls -la ~/.claude/plugins/shipmate
+   ```
+
+3. **Restart Claude Code**
+   ```bash
+   # Close and restart Claude, then verify:
+   claude
+   > /plugin list
+   ```
+
+4. **Configure Commit Template** (optional)
+   ```bash
+   git config commit.template .gitmessage
+   ```
+
+## Development Workflow
+
+1. Create a branch: `git checkout -b your-feature-name`
+2. Make changes (follow existing code style)
+3. Test thoroughly with different GitHub scopes and activity patterns
+4. Commit using [Conventional Commits](https://www.conventionalcommits.org/)
+5. Push and create PR
+
+## Testing Changes
+
+After modifying files in your local checkout:
+
+1. Copy updated files to `~/.claude/`:
+   ```bash
+   cp skills/shipmate:end-of-day-summary/SKILL.md ~/.claude/skills/shipmate:end-of-day-summary/
+   cp agents/*.md ~/.claude/agents/
+   ```
+
+2. Test with the skill:
+   ```bash
+   claude
+   > Generate my end-of-day summary
+   ```
+
+3. Test edge cases:
+   - No GitHub activity in last 24 hours
+   - Multiple GitHub organizations
+   - Different configuration options
+   - Integration with Notion (if configured)
+
+## Commit Messages
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/). See [.gitmessage](.gitmessage) if available for examples.
+
+**Triggers release:**
+- `feat:` - New feature (minor bump)
+- `fix:` - Bug fix (patch bump)
+- `perf:` - Performance improvement (patch bump)
+- `feat!:` or `fix!:` - Breaking change (major bump)
+
+**No release:**
+- `docs:`, `chore:`, `refactor:`, `test:`, `ci:`, `build:`
+
+**Format:**
+```
+<type>: <description>
+
+[optional body]
+
+[optional footer]
 ```
 
-2. **Symlink to Claude Code skills directory:**
+## Pull Requests
 
-```bash
-ln -s "$(pwd)/skills/eod" ~/.claude/skills/shipmate-eod
+**Before submitting:**
+- [ ] Code follows existing patterns
+- [ ] Tested with multiple GitHub activity scenarios
+- [ ] Documentation updated (README, skill docs, agent docs)
+- [ ] PR title follows format: `type: description`
+- [ ] Configuration examples updated if needed
+
+**PR title must use Conventional Commits format** - GitHub Action validates this.
+
+## Project Structure
+
+```
+shipmate/
+├── .claude-plugin/          # Plugin metadata
+├── skills/                  # Skill definitions
+│   └── shipmate:end-of-day-summary/
+├── agents/                  # Agent definitions
+│   ├── github-analyzer-agent.md
+│   └── summarizer-agent.md
+├── integrations/            # Integration guides
+│   └── notion/
+├── scripts/                 # Build and release scripts
+├── .github/workflows/       # CI/CD
+└── README.md               # Main docs
 ```
 
-3. **Restart Claude Code** to load the skill.
+## Getting Help
 
-4. **Create test configuration:**
+- [Issues](https://github.com/dreamiurg/shipmate/issues)
+- [Example Output](README.md#example-output)
+- [Skill Documentation](skills/shipmate:end-of-day-summary/SKILL.md)
+- [Claude Code Docs](https://docs.claude.com/claude-code)
 
-```bash
-# Create project-specific config
-mkdir -p .claude
-cat > .claude/shipmate.yaml << 'EOF'
-github_scope: personal
+## What to Contribute
 
-claude_sessions:
-  enabled: true
-  time_window_hours: 24
-  correlation_window_hours: 2
-  min_duration_minutes: 2
-EOF
-```
+We welcome:
+- Bug fixes
+- New integration support (Slack, Discord, etc.)
+- Better activity analysis and theme detection
+- Summary format improvements
+- Documentation improvements
+- Configuration enhancements
+- Claude Code session correlation improvements
 
-5. **Test the skill:**
-
-```bash
-# In Claude Code session
-"Generate my end-of-day summary"
-```
-
-6. **After making changes, restart Claude Code** to reload the skill.
-
-### Testing Session Parser
-
-```bash
-# Test with different time windows
-node scripts/parse-claude-sessions.js 24 2
-node scripts/parse-claude-sessions.js 168 5  # 7 days, 5 min minimum
-```
-
-### Verify Agent Files
-
-```bash
-# Agent definitions are in agents/
-ls agents/claude-analyzer-agent.md
-ls agents/github-analyzer-agent.md
-ls agents/summarizer-agent.md
-
-# Skill definition
-ls skills/eod/SKILL.md
-```
-
-## Commit Conventions
-
-Use [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat:` - New features
-- `fix:` - Bug fixes
-- `docs:` - Documentation only
-- `chore:` - Maintenance tasks
-- `refactor:` - Code refactoring
+Thank you for contributing!
