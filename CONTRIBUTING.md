@@ -10,15 +10,22 @@
 
 ### Setup
 
-1. **Clone and install plugin from local worktree:**
+1. **Clone the repository:**
 
 ```bash
-# In Claude Code
-/plugin marketplace add /path/to/shipmate/.worktrees/claude-sessions
-/plugin install shipmate@shipmate-marketplace
+git clone https://github.com/dreamiurg/shipmate.git
+cd shipmate
 ```
 
-2. **Create test configuration:**
+2. **Symlink to Claude Code skills directory:**
+
+```bash
+ln -s "$(pwd)/skills/eod" ~/.claude/skills/shipmate-eod
+```
+
+3. **Restart Claude Code** to load the skill.
+
+4. **Create test configuration:**
 
 ```bash
 # Create project-specific config
@@ -34,12 +41,14 @@ claude_sessions:
 EOF
 ```
 
-3. **Test the skill:**
+5. **Test the skill:**
 
 ```bash
 # In Claude Code session
 "Generate my end-of-day summary"
 ```
+
+6. **After making changes, restart Claude Code** to reload the skill.
 
 ### Testing Session Parser
 
