@@ -93,10 +93,12 @@ Store the user's selection for use in Step 3.
 **Read Claude sessions configuration from `shipmate.yaml`:**
 
 Check for configuration in these locations (project-specific overrides global):
+
 - `<project>/.claude/shipmate.yaml`
 - `~/.claude/shipmate.yaml`
 
 Extract these values from the `claude_sessions` section:
+
 - `enabled` (default: true)
 - `time_window_hours` (default: 24)
 - `correlation_window_hours` (default: 2)
@@ -155,6 +157,7 @@ Return JSON with session metadata including:
 **If `claude_sessions.enabled` is false:**
 
 Set `CLAUDE_SESSIONS` to empty result:
+
 ```json
 {
   "sessions": [],
@@ -167,6 +170,7 @@ Set `CLAUDE_SESSIONS` to empty result:
 ```
 
 **IMPORTANT:**
+
 - Use Haiku model for fast, cheap execution
 - The agent will handle missing `~/.claude/` directory gracefully
 - Always returns valid JSON even if no sessions found
@@ -213,6 +217,7 @@ For each theme, create a clear, descriptive label like:
 3. **Enrich GitHub activities**: Add `related_sessions` array to matching commits/PRs
 
 **Enriched activity format:**
+
 ```json
 {
   "type": "commit",
@@ -234,11 +239,13 @@ For each theme, create a clear, descriptive label like:
 }
 ```
 
-4. **Track orphaned sessions**: Sessions that don't match any GitHub activity
-   - These represent investigation work without commits
-   - Store separately for inclusion in summary as "exploration" or "investigation" work
+**Track orphaned sessions**: Sessions that don't match any GitHub activity
+
+- These represent investigation work without commits
+- Store separately for inclusion in summary as "exploration" or "investigation" work
 
 **Pass to Step 6:**
+
 - Enriched GitHub activities (with `related_sessions` where applicable)
 - Orphaned sessions (for mention as investigation work)
 

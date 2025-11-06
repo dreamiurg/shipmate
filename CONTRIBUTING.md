@@ -12,12 +12,14 @@ Thank you for your interest in contributing! This guide will help you get starte
 ## Local Development Setup
 
 1. **Fork and Clone**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/shipmate.git
    cd shipmate
    ```
 
 2. **Symlink to Claude Plugins Directory**
+
    ```bash
    mkdir -p ~/.claude/plugins
    ln -s /path/to/shipmate ~/.claude/plugins/shipmate
@@ -27,6 +29,7 @@ Thank you for your interest in contributing! This guide will help you get starte
    ```
 
 3. **Restart Claude Code**
+
    ```bash
    # Close and restart Claude, then verify:
    claude
@@ -34,6 +37,7 @@ Thank you for your interest in contributing! This guide will help you get starte
    ```
 
 4. **Configure Commit Template** (optional)
+
    ```bash
    git config commit.template .gitmessage
    ```
@@ -51,12 +55,14 @@ Thank you for your interest in contributing! This guide will help you get starte
 After modifying files in your local checkout:
 
 1. Copy updated files to `~/.claude/`:
+
    ```bash
    cp skills/shipmate:end-of-day-summary/SKILL.md ~/.claude/skills/shipmate:end-of-day-summary/
    cp agents/*.md ~/.claude/agents/
    ```
 
 2. Test with the skill:
+
    ```bash
    claude
    > Generate my end-of-day summary
@@ -73,16 +79,19 @@ After modifying files in your local checkout:
 Follow [Conventional Commits](https://www.conventionalcommits.org/). See [.gitmessage](.gitmessage) if available for examples.
 
 **Triggers release:**
+
 - `feat:` - New feature (minor bump)
 - `fix:` - Bug fix (patch bump)
 - `perf:` - Performance improvement (patch bump)
 - `feat!:` or `fix!:` - Breaking change (major bump)
 
 **No release:**
+
 - `docs:`, `chore:`, `refactor:`, `test:`, `ci:`, `build:`
 
 **Format:**
-```
+
+```text
 <type>: <description>
 
 [optional body]
@@ -93,6 +102,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/). See [.gitme
 ## Pull Requests
 
 **Before submitting:**
+
 - [ ] Code follows existing patterns
 - [ ] Tested with multiple GitHub activity scenarios
 - [ ] Documentation updated (README, skill docs, agent docs)
@@ -103,7 +113,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/). See [.gitme
 
 ## Project Structure
 
-```
+```text
 shipmate/
 ├── .claude-plugin/          # Plugin metadata
 ├── skills/                  # Skill definitions
@@ -128,6 +138,7 @@ shipmate/
 ## What to Contribute
 
 We welcome:
+
 - Bug fixes
 - New integration support (Slack, Discord, etc.)
 - Better activity analysis and theme detection
