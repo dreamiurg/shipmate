@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/dreamiurg/shipmate/compare/v1.2.0...v1.2.1) (2025-11-06)
+
+
+### Bug Fixes
+
+* add mise tooling and resolve markdown linting errors ([#21](https://github.com/dreamiurg/shipmate/issues/21)) ([9f6ad9b](https://github.com/dreamiurg/shipmate/commit/9f6ad9b5e4aa7d21b4167c8532c98e5095b46a18))
+
 ## [1.2.0](https://github.com/dreamiurg/shipmate/compare/v1.1.8...v1.2.0) (2025-11-06)
 
 

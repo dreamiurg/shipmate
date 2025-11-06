@@ -1,6 +1,6 @@
 {
   "name": "shipmate",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Your daily dev sidekick for tracking what you ship - generates conversational end-of-day summaries from GitHub activity",
   "author": {
     "name": "dreamiurg",
