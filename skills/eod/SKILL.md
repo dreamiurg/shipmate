@@ -130,9 +130,53 @@ Use parallel queries for performance.
 
 Once the agent returns data, mark todo #3 as completed.
 
-### Step 4: Analyze Activity and Identify Key Themes
+### Step 3.5: Invoke Claude Analyzer Agent (Conditional)
 
 **Mark todo #4 as in_progress.**
+
+**Check if Claude sessions integration is enabled** from the configuration read in Step 2.5.
+
+**If `claude_sessions.enabled` is true:**
+
+Use the Task tool to invoke the `shipmate:claude-analyzer-agent` agent (subagent_type="shipmate:claude-analyzer-agent", model="haiku"):
+
+```text
+Extract Claude Code sessions from the last {time_window_hours} hours with minimum duration {min_duration_minutes} minutes.
+
+Return JSON with session metadata including:
+- session_id
+- project_path
+- start_time, end_time, duration_minutes
+- message_count
+- summary (first user message)
+- tool_usage (file_edits, bash_commands, reads)
+```
+
+**If `claude_sessions.enabled` is false:**
+
+Set `CLAUDE_SESSIONS` to empty result:
+```json
+{
+  "sessions": [],
+  "metadata": {
+    "time_window_hours": 24,
+    "min_duration_minutes": 2,
+    "total_sessions": 0
+  }
+}
+```
+
+**IMPORTANT:**
+- Use Haiku model for fast, cheap execution
+- The agent will handle missing `~/.claude/` directory gracefully
+- Always returns valid JSON even if no sessions found
+- Store result in `CLAUDE_SESSIONS` variable for use in Step 4.5
+
+Once the agent returns data (or feature is disabled), mark todo #4 as completed.
+
+### Step 4: Analyze Activity and Identify Key Themes
+
+**Mark todo #5 as in_progress.**
 
 Review the data from Step 3 and identify distinct themes/topics based on:
 
@@ -152,11 +196,11 @@ For each theme, create a clear, descriptive label like:
 
 **IMPORTANT**: Identify ALL distinct themes, not just major ones. Include both substantial investigations and smaller tasks.
 
-Once themes are identified, mark todo #4 as completed.
+Once themes are identified, mark todo #5 as completed.
 
 ### Step 5: Ask User to Select Main Topics
 
-**Mark todo #5 as in_progress.**
+**Mark todo #6 as in_progress.**
 
 Use the AskUserQuestion tool with multiSelect enabled:
 
@@ -175,11 +219,11 @@ Example:
 
 Store the user's selections (2-4 topics).
 
-Once the user has made their selections, mark todo #5 as completed.
+Once the user has made their selections, mark todo #6 as completed.
 
 ### Step 6: Invoke Activity Summarizer Agent
 
-**Mark todo #6 as in_progress.**
+**Mark todo #7 as in_progress.**
 
 Use the Task tool to invoke the `shipmate:summarizer-agent` agent (subagent_type="shipmate:summarizer-agent"):
 
@@ -205,21 +249,21 @@ Generate a conversational summary following the format with:
 - Everything NOT selected should be grouped into "Housekeeping"
 - The agent will return the formatted summary
 
-Once the agent returns the summary, mark todo #6 as completed.
+Once the agent returns the summary, mark todo #7 as completed.
 
 ### Step 7: Present Summary to User
 
-**Mark todo #7 as in_progress.**
+**Mark todo #8 as in_progress.**
 
 Display the summary returned by the summarizer agent.
 
 **Optional Polish**: If the `elements-of-style:writing-clearly-and-concisely` skill is available, you may optionally use it to polish the summary further, but the summarizer agent already applies these principles.
 
-Once the summary is displayed, mark todo #7 as completed.
+Once the summary is displayed, mark todo #8 as completed.
 
 ### Step 8: Check for Enabled Integrations
 
-**Mark todo #8 as in_progress.**
+**Mark todo #9 as in_progress.**
 
 Check the `shipmate.yaml` configuration for enabled integrations under the `integrations` section.
 
@@ -228,7 +272,7 @@ For each enabled integration, proceed to the appropriate step:
 - If `integrations.notion.enabled: true`, proceed to Step 9
 - If other integrations are enabled in the future, handle them here
 
-If no integrations are enabled, mark todo #8 as completed and you're done.
+If no integrations are enabled, mark todo #9 as completed and you're done.
 
 ### Step 9: Post to Notion Daily Log (if enabled)
 
