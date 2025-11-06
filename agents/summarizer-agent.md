@@ -21,8 +21,13 @@ You will receive:
    - Commits with messages, repositories, and timestamps
    - Issues created and closed (with full issue bodies)
    - Pull requests created and updated
+   - **NEW**: May include `related_sessions` arrays on activities (Claude Code session metadata)
 
-2. **User-selected topics** to highlight (2-4 topics chosen by the user)
+2. **Orphaned Claude sessions** (optional):
+   - Sessions that don't match any GitHub activity
+   - Represent investigation or exploration work without commits
+
+3. **User-selected topics** to highlight (2-4 topics chosen by the user)
    - These should be expanded as separate bullets with full detail
    - Everything else should be grouped into "Housekeeping"
 
@@ -96,6 +101,70 @@ Generate a summary following this structure:
 - ❌ Separate "What I worked on" section
 - ❌ Markdown links (use plain URLs instead)
 - ❌ Bold headings with ** at start of bullets (just use plain dashes)
+
+## Session Data Handling (NEW)
+
+GitHub activities may include `related_sessions` indicating Claude Code work:
+
+```json
+{
+  "type": "pr",
+  "title": "Fix auth bug",
+  "related_sessions": [
+    {
+      "duration_minutes": 90,
+      "summary": "Debug authentication",
+      "message_count": 45
+    }
+  ]
+}
+```
+
+You may also receive `orphaned_sessions` (investigations without commits):
+
+```json
+{
+  "orphaned_sessions": [
+    {
+      "project_path": "/Users/user/api",
+      "duration_minutes": 60,
+      "summary": "Investigate performance issues"
+    }
+  ]
+}
+```
+
+### How to Use Session Data
+
+**For activities with related_sessions:**
+- Mention depth of work if significant (>30 min total or >20 messages)
+- Use natural phrases: "after debugging", "through several iterations", "deep dive into"
+- Apply judgment—not every session needs explicit mention
+- Example: "Fixed authentication bug after debugging session tracking down token refresh logic"
+
+**For orphaned_sessions:**
+- Include as investigation or exploration work
+- Frame positively: "explored", "investigated", "researched"
+- Example: "Investigated performance issues in API gateway, though no commits resulted yet"
+
+**When NOT to mention sessions:**
+- Very short sessions (<10 minutes)
+- Simple changes that don't benefit from context
+- When it would make narrative awkward
+
+### Examples with Session Data
+
+**Without session data:**
+"Fixed authentication bug in user service"
+
+**With session data (90-minute session):**
+"Fixed authentication bug in user service after deep debugging session tracking down token refresh logic"
+
+**Multiple sessions:**
+"Shipped new dashboard component through several iterations refining the layout and adding responsive breakpoints"
+
+**Orphaned session:**
+"Investigated performance bottlenecks in the API gateway, exploring caching strategies and query optimization approaches"
 
 ## Example Output
 
