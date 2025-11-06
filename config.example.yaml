@@ -16,6 +16,14 @@
 # If not set or empty, you'll be prompted each time
 github_scope: ""
 
+# Claude Code Session Integration (optional)
+# Enriches summaries with Claude Code session data to reveal depth of work
+claude_sessions:
+  enabled: true                    # Toggle feature on/off
+  time_window_hours: 24            # Match GitHub's window
+  correlation_window_hours: 2      # How close in time to match sessions with commits
+  min_duration_minutes: 2          # Ignore very short sessions
+
 # Integrations (optional)
 # Enable/disable various integrations for posting summaries
 integrations:

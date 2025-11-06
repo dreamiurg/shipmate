@@ -36,11 +36,12 @@ See `config.example.yaml` for configuration options.
 1. "Detect GitHub organizations and username"
 2. "Ask user to select activity scope"
 3. "Extract GitHub activity data"
-4. "Analyze activity and identify themes"
-5. "Ask user to select main topics"
-6. "Generate conversational summary"
-7. "Present summary to user"
-8. "Post to enabled integrations (if configured)"
+4. "Extract Claude Code sessions (if enabled)"
+5. "Analyze activity and identify themes"
+6. "Ask user to select main topics"
+7. "Generate conversational summary"
+8. "Present summary to user"
+9. "Post to enabled integrations (if configured)"
 
 Mark the first todo as `in_progress` immediately after creating the list.
 
@@ -86,6 +87,22 @@ Use the AskUserQuestion tool with this EXACT question:
 - Do NOT proceed to Step 3 until the user has made a selection
 
 Store the user's selection for use in Step 3.
+
+### Step 2.5: Read Claude Sessions Configuration
+
+**Read Claude sessions configuration from `shipmate.yaml`:**
+
+Check for configuration in these locations (project-specific overrides global):
+- `<project>/.claude/shipmate.yaml`
+- `~/.claude/shipmate.yaml`
+
+Extract these values from the `claude_sessions` section:
+- `enabled` (default: true)
+- `time_window_hours` (default: 24)
+- `correlation_window_hours` (default: 2)
+- `min_duration_minutes` (default: 2)
+
+Store these values for use in Step 3.5.
 
 ### Step 3: Invoke GitHub Analyzer Agent
 
