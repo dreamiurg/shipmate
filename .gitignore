@@ -19,3 +19,6 @@ npm-debug.log*
 
 # Config (users should use config.example.yaml)
 shipmate.yaml
+
+# Git worktrees
+.worktrees/
