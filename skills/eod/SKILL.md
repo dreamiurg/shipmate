@@ -196,7 +196,53 @@ For each theme, create a clear, descriptive label like:
 
 **IMPORTANT**: Identify ALL distinct themes, not just major ones. Include both substantial investigations and smaller tasks.
 
-Once themes are identified, mark todo #5 as completed.
+### Step 4.5: Correlate Claude Sessions with GitHub Activity
+
+**Before marking todo #5 as completed**, correlate Claude sessions with GitHub activities.
+
+**For each Claude session in `CLAUDE_SESSIONS`:**
+
+1. **Match by project path**: Compare `session.project_path` with repository paths from GitHub commits/PRs
+   - Normalize paths (handle workspace paths, symlinks, etc.)
+   - Look for substring matches (e.g., session in `/Users/user/myproject` matches commits in `myproject` repo)
+
+2. **Match by time proximity**: Sessions within ±`correlation_window_hours` of commit/PR timestamps
+   - Calculate time difference between session and GitHub activity
+   - If within window, consider it a match
+
+3. **Enrich GitHub activities**: Add `related_sessions` array to matching commits/PRs
+
+**Enriched activity format:**
+```json
+{
+  "type": "commit",
+  "message": "Fix auth bug",
+  "timestamp": "2025-11-06T14:30:00Z",
+  "repo": "myapp",
+  "related_sessions": [
+    {
+      "duration_minutes": 90,
+      "summary": "Debug authentication",
+      "message_count": 45,
+      "tool_usage": {
+        "file_edits": 3,
+        "bash_commands": 12,
+        "reads": 8
+      }
+    }
+  ]
+}
+```
+
+4. **Track orphaned sessions**: Sessions that don't match any GitHub activity
+   - These represent investigation work without commits
+   - Store separately for inclusion in summary as "exploration" or "investigation" work
+
+**Pass to Step 6:**
+- Enriched GitHub activities (with `related_sessions` where applicable)
+- Orphaned sessions (for mention as investigation work)
+
+Once correlation is complete, mark todo #5 as completed.
 
 ### Step 5: Ask User to Select Main Topics
 
@@ -230,7 +276,10 @@ Use the Task tool to invoke the `shipmate:summarizer-agent` agent (subagent_type
 ```text
 Please create a team standup summary from this GitHub activity data:
 
-[Paste the complete output from Step 3]
+[Paste the enriched GitHub activities from Step 4.5, including any related_sessions]
+
+Orphaned Claude sessions (investigation work without commits):
+[Paste orphaned sessions from Step 4.5, if any]
 
 The user has selected these topics to highlight as main accomplishments:
 [List the topics selected in Step 5]
@@ -240,11 +289,14 @@ Generate a conversational summary following the format with:
 - All other activities grouped as "Housekeeping"
 - Plain URLs to documentation artifacts
 - Past tense, casual tone
+- Weave in session insights naturally where related_sessions exist (see agent instructions for guidance)
 ```
 
 **IMPORTANT**:
 
-- Pass the complete raw data from the analyzer agent
+- Pass the enriched GitHub activities with related_sessions (from Step 4.5)
+- Pass orphaned sessions separately
+- Include correlation window hours in context
 - Clearly indicate which topics the user selected to highlight
 - Everything NOT selected should be grouped into "Housekeeping"
 - The agent will return the formatted summary
