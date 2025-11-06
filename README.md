@@ -123,6 +123,7 @@ The skill will:
 ## Features
 
 - **Smart activity extraction** - Pulls commits, issues, and PRs from the last 24 hours
+- **Claude Code Session Integration** - Reveals depth of work behind commits by correlating with Claude Code session history
 - **Conversational summaries** - Turns raw GitHub data into readable updates
 - **Multi-organization support** - Track activity across personal and org accounts
 - **Topic selection** - You pick what to highlight vs what's housekeeping
@@ -143,12 +144,21 @@ See [`config.example.yaml`](config.example.yaml) for all options.
 # Set default GitHub scope
 github_scope: "all"  # or "personal" or "my-org-name"
 
+# Claude Code Session Integration
+claude_sessions:
+  enabled: true                    # Enable Claude Code session integration
+  time_window_hours: 24            # How far back to look for sessions
+  correlation_window_hours: 2      # Time proximity for matching sessions to commits
+  min_duration_minutes: 2          # Ignore sessions shorter than this
+
 # Enable integrations
 integrations:
   notion:
     enabled: true
     daily_log_url: "https://www.notion.so/your-workspace/Daily-Log-abc123"
 ```
+
+See [Claude Sessions Documentation](docs/CLAUDE_SESSIONS.md) for details.
 
 ## Integrations
 

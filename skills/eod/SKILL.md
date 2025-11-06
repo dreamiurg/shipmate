@@ -36,11 +36,12 @@ See `config.example.yaml` for configuration options.
 1. "Detect GitHub organizations and username"
 2. "Ask user to select activity scope"
 3. "Extract GitHub activity data"
-4. "Analyze activity and identify themes"
-5. "Ask user to select main topics"
-6. "Generate conversational summary"
-7. "Present summary to user"
-8. "Post to enabled integrations (if configured)"
+4. "Extract Claude Code sessions (if enabled)"
+5. "Analyze activity and identify themes"
+6. "Ask user to select main topics"
+7. "Generate conversational summary"
+8. "Present summary to user"
+9. "Post to enabled integrations (if configured)"
 
 Mark the first todo as `in_progress` immediately after creating the list.
 
@@ -87,6 +88,22 @@ Use the AskUserQuestion tool with this EXACT question:
 
 Store the user's selection for use in Step 3.
 
+### Step 2.5: Read Claude Sessions Configuration
+
+**Read Claude sessions configuration from `shipmate.yaml`:**
+
+Check for configuration in these locations (project-specific overrides global):
+- `<project>/.claude/shipmate.yaml`
+- `~/.claude/shipmate.yaml`
+
+Extract these values from the `claude_sessions` section:
+- `enabled` (default: true)
+- `time_window_hours` (default: 24)
+- `correlation_window_hours` (default: 2)
+- `min_duration_minutes` (default: 2)
+
+Store these values for use in Step 3.5.
+
 ### Step 3: Invoke GitHub Analyzer Agent
 
 **Mark todo #2 as completed and todo #3 as in_progress.**
@@ -113,9 +130,53 @@ Use parallel queries for performance.
 
 Once the agent returns data, mark todo #3 as completed.
 
-### Step 4: Analyze Activity and Identify Key Themes
+### Step 3.5: Invoke Claude Analyzer Agent (Conditional)
 
 **Mark todo #4 as in_progress.**
+
+**Check if Claude sessions integration is enabled** from the configuration read in Step 2.5.
+
+**If `claude_sessions.enabled` is true:**
+
+Use the Task tool to invoke the `shipmate:claude-analyzer-agent` agent (subagent_type="shipmate:claude-analyzer-agent", model="haiku"):
+
+```text
+Extract Claude Code sessions from the last {time_window_hours} hours with minimum duration {min_duration_minutes} minutes.
+
+Return JSON with session metadata including:
+- session_id
+- project_path
+- start_time, end_time, duration_minutes
+- message_count
+- summary (first user message)
+- tool_usage (file_edits, bash_commands, reads)
+```
+
+**If `claude_sessions.enabled` is false:**
+
+Set `CLAUDE_SESSIONS` to empty result:
+```json
+{
+  "sessions": [],
+  "metadata": {
+    "time_window_hours": 24,
+    "min_duration_minutes": 2,
+    "total_sessions": 0
+  }
+}
+```
+
+**IMPORTANT:**
+- Use Haiku model for fast, cheap execution
+- The agent will handle missing `~/.claude/` directory gracefully
+- Always returns valid JSON even if no sessions found
+- Store result in `CLAUDE_SESSIONS` variable for use in Step 4.5
+
+Once the agent returns data (or feature is disabled), mark todo #4 as completed.
+
+### Step 4: Analyze Activity and Identify Key Themes
+
+**Mark todo #5 as in_progress.**
 
 Review the data from Step 3 and identify distinct themes/topics based on:
 
@@ -135,11 +196,57 @@ For each theme, create a clear, descriptive label like:
 
 **IMPORTANT**: Identify ALL distinct themes, not just major ones. Include both substantial investigations and smaller tasks.
 
-Once themes are identified, mark todo #4 as completed.
+### Step 4.5: Correlate Claude Sessions with GitHub Activity
+
+**Before marking todo #5 as completed**, correlate Claude sessions with GitHub activities.
+
+**For each Claude session in `CLAUDE_SESSIONS`:**
+
+1. **Match by project path**: Compare `session.project_path` with repository paths from GitHub commits/PRs
+   - Normalize paths (handle workspace paths, symlinks, etc.)
+   - Look for substring matches (e.g., session in `/Users/user/myproject` matches commits in `myproject` repo)
+
+2. **Match by time proximity**: Sessions within ±`correlation_window_hours` of commit/PR timestamps
+   - Calculate time difference between session and GitHub activity
+   - If within window, consider it a match
+
+3. **Enrich GitHub activities**: Add `related_sessions` array to matching commits/PRs
+
+**Enriched activity format:**
+```json
+{
+  "type": "commit",
+  "message": "Fix auth bug",
+  "timestamp": "2025-11-06T14:30:00Z",
+  "repo": "myapp",
+  "related_sessions": [
+    {
+      "duration_minutes": 90,
+      "summary": "Debug authentication",
+      "message_count": 45,
+      "tool_usage": {
+        "file_edits": 3,
+        "bash_commands": 12,
+        "reads": 8
+      }
+    }
+  ]
+}
+```
+
+4. **Track orphaned sessions**: Sessions that don't match any GitHub activity
+   - These represent investigation work without commits
+   - Store separately for inclusion in summary as "exploration" or "investigation" work
+
+**Pass to Step 6:**
+- Enriched GitHub activities (with `related_sessions` where applicable)
+- Orphaned sessions (for mention as investigation work)
+
+Once correlation is complete, mark todo #5 as completed.
 
 ### Step 5: Ask User to Select Main Topics
 
-**Mark todo #5 as in_progress.**
+**Mark todo #6 as in_progress.**
 
 Use the AskUserQuestion tool with multiSelect enabled:
 
@@ -158,18 +265,21 @@ Example:
 
 Store the user's selections (2-4 topics).
 
-Once the user has made their selections, mark todo #5 as completed.
+Once the user has made their selections, mark todo #6 as completed.
 
 ### Step 6: Invoke Activity Summarizer Agent
 
-**Mark todo #6 as in_progress.**
+**Mark todo #7 as in_progress.**
 
 Use the Task tool to invoke the `shipmate:summarizer-agent` agent (subagent_type="shipmate:summarizer-agent"):
 
 ```text
 Please create a team standup summary from this GitHub activity data:
 
-[Paste the complete output from Step 3]
+[Paste the enriched GitHub activities from Step 4.5, including any related_sessions]
+
+Orphaned Claude sessions (investigation work without commits):
+[Paste orphaned sessions from Step 4.5, if any]
 
 The user has selected these topics to highlight as main accomplishments:
 [List the topics selected in Step 5]
@@ -179,30 +289,33 @@ Generate a conversational summary following the format with:
 - All other activities grouped as "Housekeeping"
 - Plain URLs to documentation artifacts
 - Past tense, casual tone
+- Weave in session insights naturally where related_sessions exist (see agent instructions for guidance)
 ```
 
 **IMPORTANT**:
 
-- Pass the complete raw data from the analyzer agent
+- Pass the enriched GitHub activities with related_sessions (from Step 4.5)
+- Pass orphaned sessions separately
+- Include correlation window hours in context
 - Clearly indicate which topics the user selected to highlight
 - Everything NOT selected should be grouped into "Housekeeping"
 - The agent will return the formatted summary
 
-Once the agent returns the summary, mark todo #6 as completed.
+Once the agent returns the summary, mark todo #7 as completed.
 
 ### Step 7: Present Summary to User
 
-**Mark todo #7 as in_progress.**
+**Mark todo #8 as in_progress.**
 
 Display the summary returned by the summarizer agent.
 
 **Optional Polish**: If the `elements-of-style:writing-clearly-and-concisely` skill is available, you may optionally use it to polish the summary further, but the summarizer agent already applies these principles.
 
-Once the summary is displayed, mark todo #7 as completed.
+Once the summary is displayed, mark todo #8 as completed.
 
 ### Step 8: Check for Enabled Integrations
 
-**Mark todo #8 as in_progress.**
+**Mark todo #9 as in_progress.**
 
 Check the `shipmate.yaml` configuration for enabled integrations under the `integrations` section.
 
@@ -211,7 +324,7 @@ For each enabled integration, proceed to the appropriate step:
 - If `integrations.notion.enabled: true`, proceed to Step 9
 - If other integrations are enabled in the future, handle them here
 
-If no integrations are enabled, mark todo #8 as completed and you're done.
+If no integrations are enabled, mark todo #9 as completed and you're done.
 
 ### Step 9: Post to Notion Daily Log (if enabled)
 
