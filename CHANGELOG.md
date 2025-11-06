@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/dreamiurg/shipmate/compare/v1.1.8...v1.2.0) (2025-11-06)
+
+
+### Features
+
+* Claude Code session integration ([#20](https://github.com/dreamiurg/shipmate/issues/20)) ([aecb75b](https://github.com/dreamiurg/shipmate/commit/aecb75bd94b79acd7e9c5c2bb5c4fd1791123b7e))
+
 ## [1.1.8](https://github.com/dreamiurg/shipmate/compare/v1.1.7...v1.1.8) (2025-11-05)
 
 
