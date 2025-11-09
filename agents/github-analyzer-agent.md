@@ -36,72 +36,38 @@ This calculates exactly 24 hours ago from the current time in UTC format and emb
 
 Use this inline date calculation in all date queries to ensure all activity from the last 24 hours is included.
 
-### Parallel Execution
+### Data Collection
 
-**ALWAYS run all 5 queries in parallel** using a single message with 5 Bash tool calls. Do NOT run sequentially.
-
-### Query Commands
-
-**Query 1 - Commits:**
+Use the bundled `fetch-github-activity.sh` script to collect all GitHub data in a single call:
 
 ```bash
-# For organization:
-gh search commits --owner {org_name} --author @me --committer-date ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json commit,repository,sha,author,committer --limit 100
+# Detect plugin installation directory
+PLUGIN_DIR=$(find ~/.claude/plugins -name "shipmate" -type d 2>/dev/null | head -1)
 
-# For personal (filter by username):
-gh search commits --author @me --committer-date ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json commit,repository,sha,author,committer --limit 100 | jq '[.[] | select(.repository.owner.login == "{username}")]'
+# Fall back to local script if not installed as plugin
+if [[ -n "$PLUGIN_DIR" ]]; then
+  SCRIPT="$PLUGIN_DIR/scripts/fetch-github-activity.sh"
+else
+  SCRIPT="./scripts/fetch-github-activity.sh"
+fi
+
+# Run based on scope
+# For personal:
+"$SCRIPT" personal {username}
+
+# For organization:
+"$SCRIPT" org {username} {org_name}
 
 # For all:
-gh search commits --author @me --committer-date ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json commit,repository,sha,author,committer --limit 100
+"$SCRIPT" all {username}
 ```
 
-**Query 2 - Issues Created:**
-
-```bash
-# For organization:
-gh search issues --owner {org_name} --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository --limit 100
-
-# For personal/all:
-gh search issues --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository --limit 100
-```
-
-**Query 3 - Issues Closed:**
-
-```bash
-# For organization:
-gh search issues --owner {org_name} --author @me --closed ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository,closedAt --limit 100
-
-# For personal/all:
-gh search issues --author @me --closed ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository,closedAt --limit 100
-```
-
-**Query 4 - PRs Created:**
-
-```bash
-# For organization:
-gh search prs --owner {org_name} --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository --limit 100
-
-# For personal/all:
-gh search prs --author @me --created ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository --limit 100
-```
-
-**Query 5 - PRs Updated:**
-
-```bash
-# For organization:
-gh search prs --owner {org_name} --author @me --updated ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository,updatedAt --limit 100
-
-# For personal/all:
-gh search prs --author @me --updated ">=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)" --json number,title,state,url,repository,updatedAt --limit 100
-```
-
-### Scope Filtering
-
-After collecting data, filter results based on scope:
-
-- **Personal account**: Only repositories owned by user (not org repos)
-- **Specific organization**: Only repositories under that organization
-- **All**: Include all results (no filtering)
+This script:
+- Runs all 5 queries (commits, issues created, issues closed, PRs created, PRs updated) internally
+- Filters by scope automatically
+- Returns consolidated JSON output
+- Handles errors gracefully (returns empty arrays on failure)
+- Requires only ONE approval instead of 5+
 
 ### Issue Details
 
