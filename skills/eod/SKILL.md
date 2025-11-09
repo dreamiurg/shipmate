@@ -88,9 +88,9 @@ Use the AskUserQuestion tool with this EXACT question:
 
 Store the user's selection for use in Step 3.
 
-### Step 2.5: Read Claude Sessions Configuration
+### Step 2.5: Read Configuration and Detect Script Paths
 
-**Read Claude sessions configuration from `shipmate.yaml`:**
+**A. Read Claude sessions configuration from `shipmate.yaml`:**
 
 Check for configuration in these locations (project-specific overrides global):
 
@@ -104,7 +104,23 @@ Extract these values from the `claude_sessions` section:
 - `correlation_window_hours` (default: 2)
 - `min_duration_minutes` (default: 2)
 
-Store these values for use in Step 3.5.
+**B. Detect script paths for agents:**
+
+Run this command to find the shipmate plugin directory:
+
+```bash
+PLUGIN_DIR=$(find ~/.claude/plugins -name "shipmate" -type d 2>/dev/null | head -1)
+
+if [[ -n "$PLUGIN_DIR" ]]; then
+  echo "GITHUB_SCRIPT=$PLUGIN_DIR/scripts/fetch-github-activity.sh"
+  echo "CLAUDE_SCRIPT=$PLUGIN_DIR/scripts/parse-claude-sessions.js"
+else
+  echo "GITHUB_SCRIPT=./scripts/fetch-github-activity.sh"
+  echo "CLAUDE_SCRIPT=./scripts/parse-claude-sessions.js"
+fi
+```
+
+Store the `GITHUB_SCRIPT` and `CLAUDE_SCRIPT` paths for passing to agents.
 
 ### Step 3: Invoke GitHub Analyzer Agent
 
@@ -115,19 +131,23 @@ Use the Task tool to invoke the `shipmate:github-analyzer-agent` agent (subagent
 ```text
 Please extract GitHub activity data for the last 24 hours with the following scope: [user's selection from Step 2]
 
-Return structured data including:
-- All commits with messages, repositories, timestamps
-- Issues created and closed (with full issue bodies)
-- Pull requests created and updated
+Use the bundled script at this path: {GITHUB_SCRIPT from Step 2.5}
 
-Use parallel queries for performance.
+Run it as:
+{GITHUB_SCRIPT} [scope] {username} [{org_name}]
+
+Where:
+- scope: "personal", "org", or "all" based on user selection
+- username: {username from Step 1}
+- org_name: {org_name from Step 1} (only if scope is "org")
+
+The script returns consolidated JSON with commits, issues, and PRs.
 ```
 
 **IMPORTANT**:
 
+- Pass the exact script path from Step 2.5
 - Specify the exact scope (personal/org name/all)
-- Request "last 24 hours"
-- Ask for parallel execution
 - The agent will return structured JSON data
 
 Once the agent returns data, mark todo #3 as completed.
@@ -145,13 +165,17 @@ Use the Task tool to invoke the `shipmate:claude-analyzer-agent` agent (subagent
 ```text
 Extract Claude Code sessions from the last {time_window_hours} hours with minimum duration {min_duration_minutes} minutes.
 
-Return JSON with session metadata including:
-- session_id
-- project_path
+Use the bundled script at this path: {CLAUDE_SCRIPT from Step 2.5}
+
+Run it as:
+node {CLAUDE_SCRIPT} {time_window_hours} {min_duration_minutes}
+
+The script returns JSON with session metadata including:
+- session_id, project_path
 - start_time, end_time, duration_minutes
-- message_count
-- summary (first user message)
+- message_count, summary
 - tool_usage (file_edits, bash_commands, reads)
+- metadata (time_window_hours, min_duration_minutes, total_sessions)
 ```
 
 **If `claude_sessions.enabled` is false:**

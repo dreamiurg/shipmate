@@ -15,22 +15,15 @@ You receive:
 
 1. **Use the bundled script to parse Claude sessions**
 
-   Use the `parse-claude-sessions.js` script to extract session data in a single call:
+   The parent skill will provide you with the exact path to the `parse-claude-sessions.js` script.
+
+   Run the script with the provided parameters:
 
    ```bash
-   # Detect plugin installation directory
-   PLUGIN_DIR=$(find ~/.claude/plugins -name "shipmate" -type d 2>/dev/null | head -1)
-
-   # Fall back to local script if not installed as plugin
-   if [[ -n "$PLUGIN_DIR" ]]; then
-     SCRIPT="$PLUGIN_DIR/scripts/parse-claude-sessions.js"
-   else
-     SCRIPT="./scripts/parse-claude-sessions.js"
-   fi
-
-   # Run the script with parameters
-   node "$SCRIPT" {time_window_hours} {min_duration_minutes}
+   node {SCRIPT_PATH} {time_window_hours} {min_duration_minutes}
    ```
+
+   Where `{SCRIPT_PATH}` is provided in your task instructions.
 
    This script:
    - Checks if `~/.claude/projects/` exists

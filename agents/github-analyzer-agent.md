@@ -38,29 +38,22 @@ Use this inline date calculation in all date queries to ensure all activity from
 
 ### Data Collection
 
-Use the bundled `fetch-github-activity.sh` script to collect all GitHub data in a single call:
+The parent skill will provide you with the exact path to the `fetch-github-activity.sh` script.
+
+Run the script with the appropriate scope:
 
 ```bash
-# Detect plugin installation directory
-PLUGIN_DIR=$(find ~/.claude/plugins -name "shipmate" -type d 2>/dev/null | head -1)
-
-# Fall back to local script if not installed as plugin
-if [[ -n "$PLUGIN_DIR" ]]; then
-  SCRIPT="$PLUGIN_DIR/scripts/fetch-github-activity.sh"
-else
-  SCRIPT="./scripts/fetch-github-activity.sh"
-fi
-
-# Run based on scope
 # For personal:
-"$SCRIPT" personal {username}
+{SCRIPT_PATH} personal {username}
 
 # For organization:
-"$SCRIPT" org {username} {org_name}
+{SCRIPT_PATH} org {username} {org_name}
 
 # For all:
-"$SCRIPT" all {username}
+{SCRIPT_PATH} all {username}
 ```
+
+Where `{SCRIPT_PATH}` is provided in your task instructions.
 
 This script:
 - Runs all 5 queries (commits, issues created, issues closed, PRs created, PRs updated) internally
