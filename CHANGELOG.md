@@ -1,3 +1,15 @@
+## [1.3.0](https://github.com/dreamiurg/shipmate/compare/v1.2.3...v1.3.0) (2025-11-09)
+
+
+### Features
+
+* add fetch-github-activity.sh script to reduce approval prompts ([aa89d90](https://github.com/dreamiurg/shipmate/commit/aa89d907a6fbbefd7ee6b73f297ec22821ace199))
+
+
+### Bug Fixes
+
+* update claude-analyzer-agent to use bundled script ([cb797ff](https://github.com/dreamiurg/shipmate/commit/cb797ffa750524422cde814a7635a39f8c4c62c2))
+
 ## [1.2.3](https://github.com/dreamiurg/shipmate/compare/v1.2.2...v1.2.3) (2025-11-09)
 
 
