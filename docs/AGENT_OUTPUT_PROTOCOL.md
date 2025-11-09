@@ -29,6 +29,7 @@ All agents should return JSON with this structure:
 ### GitHub Analyzer Agent
 
 **Success:**
+
 ```json
 {
   "commits": [ /* array of commit objects */ ],
@@ -48,6 +49,7 @@ All agents should return JSON with this structure:
 ### Claude Analyzer Agent
 
 **Success:**
+
 ```json
 {
   "sessions": [
@@ -75,6 +77,7 @@ All agents should return JSON with this structure:
 ```
 
 **Empty result (no sessions found):**
+
 ```json
 {
   "sessions": [],
@@ -89,6 +92,7 @@ All agents should return JSON with this structure:
 ### Correlation Agent
 
 **Success:**
+
 ```json
 {
   "enriched_activities": [
@@ -129,6 +133,7 @@ All agents should return JSON with this structure:
 ### Summarizer Agent
 
 **Success:**
+
 ```markdown
 # Daily Update - November 8, 2025
 
@@ -144,6 +149,7 @@ All agents should return JSON with this structure:
 Agents must handle errors gracefully and return valid JSON:
 
 **Example - Missing directory:**
+
 ```json
 {
   "sessions": [],
@@ -157,6 +163,7 @@ Agents must handle errors gracefully and return valid JSON:
 ```
 
 **Example - Partial failure:**
+
 ```json
 {
   "commits": [ /* successful results */ ],

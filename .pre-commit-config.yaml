@@ -23,8 +23,8 @@ repos:
         always_run: true
       - id: markdownlint
         name: Lint Markdown files
-        description: Check and auto-fix Markdown style issues
-        entry: markdownlint-cli2 --fix
+        description: Check Markdown style issues (matches CI behavior)
+        entry: markdownlint-cli2
         language: system
         types: [markdown]
         pass_filenames: true

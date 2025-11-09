@@ -222,6 +222,7 @@ Return enriched activities with related_sessions and identify orphaned sessions 
 ```
 
 **IMPORTANT:**
+
 - Use Haiku model for fast, cheap correlation
 - The agent will return enriched activities with `related_sessions` arrays
 - Orphaned sessions represent investigation/exploration work
