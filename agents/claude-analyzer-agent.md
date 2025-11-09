@@ -13,15 +13,58 @@ You receive:
 
 ## Your Process
 
-1. **Invoke session parser**
+1. **Parse Claude sessions directly**
 
-   ```bash
-   node scripts/parse-claude-sessions.js {time_window_hours} {min_duration_minutes}
-   ```
+   Read session files from `~/.claude/projects/` using these steps:
+
+   a. **Check if directory exists**
+      ```bash
+      ls -d ~/.claude/projects/ 2>/dev/null || echo "not-found"
+      ```
+
+      If directory doesn't exist, skip to step 3 (return empty result).
+
+   b. **List all project directories**
+      ```bash
+      ls ~/.claude/projects/
+      ```
+
+      Project directories are formatted like: `-Users-username-src-project`
+      Convert to paths: `/Users/username/src/project`
+
+   c. **For each project directory, find session files**
+      ```bash
+      ls ~/.claude/projects/{project}/*.jsonl 2>/dev/null | grep -v agent-
+      ```
+
+      Skip files starting with `agent-` (these are subagent sessions).
+
+   d. **Parse each session file**
+
+      Use the Read tool to read each `.jsonl` file.
+
+      Each line is a JSON message. Parse to extract:
+      - First message with timestamp → `start_time`
+      - Last message with timestamp → `end_time`
+      - Calculate `duration_minutes` = (end_time - start_time) / 60000
+      - First message with `cwd` field → `project_path`
+      - First user message content → `summary` (first 100 chars)
+      - Count tool uses: Edit, Bash, Read → `tool_usage`
+
+   e. **Filter sessions**
+
+      Only include sessions where:
+      - `start_time` >= (now - {time_window_hours} hours)
+      - `duration_minutes` >= {min_duration_minutes}
+
+   f. **Sort sessions**
+
+      Sort by `start_time` (most recent first).
 
 2. **Handle errors gracefully**
-   - If `~/.claude/` doesn't exist: Return empty sessions array
-   - If script fails: Return empty sessions array with error note
+   - If `~/.claude/projects/` doesn't exist: Return empty sessions array
+   - If a session file is malformed: Skip it and continue
+   - If Read tool fails: Skip that file and continue
    - Never fail - always return valid JSON
 
 3. **Return JSON**
@@ -54,6 +97,8 @@ You receive:
 
 ## Output Format
 
+Follow the standardized output protocol defined in `docs/AGENT_OUTPUT_PROTOCOL.md`.
+
 Always return valid JSON to stdout, even if no sessions found.
 
 Empty result:
@@ -68,6 +113,8 @@ Empty result:
   }
 }
 ```
+
+**IMPORTANT**: Never fail - always return valid JSON. If errors occur, return empty sessions array with error note in metadata.
 
 ## Model
 

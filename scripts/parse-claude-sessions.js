@@ -159,7 +159,14 @@ function main() {
     new Date(b.start_time) - new Date(a.start_time)
   );
 
-  console.log(JSON.stringify({ sessions: allSessions }, null, 2));
+  console.log(JSON.stringify({
+    sessions: allSessions,
+    metadata: {
+      time_window_hours: timeWindow,
+      min_duration_minutes: minDuration,
+      total_sessions: allSessions.length
+    }
+  }, null, 2));
 }
 
 main();

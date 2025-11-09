@@ -115,6 +115,8 @@ Run these in parallel as well (one call per closed issue).
 
 ## Output Format
 
+Follow the standardized output protocol defined in `docs/AGENT_OUTPUT_PROTOCOL.md`.
+
 Return a structured summary containing:
 
 1. **Commits**: Array of commit objects with:
@@ -131,6 +133,8 @@ Return a structured summary containing:
 4. **PRs Created**: Array with title, number, state, URL, repository
 
 5. **PRs Updated**: Array with title, number, state, URL, repository, updated timestamp
+
+6. **Metadata**: Include query parameters and counts (time_window_hours, total_commits, total_issues, total_prs, etc.)
 
 ## Important Notes
 

@@ -202,54 +202,32 @@ For each theme, create a clear, descriptive label like:
 
 ### Step 4.5: Correlate Claude Sessions with GitHub Activity
 
-**Before marking todo #5 as completed**, correlate Claude sessions with GitHub activities.
+**Before marking todo #5 as completed**, use the correlation agent to enrich GitHub activities with session data.
 
-**For each Claude session in `CLAUDE_SESSIONS`:**
+Use the Task tool to invoke the `shipmate:correlation-agent` agent (subagent_type="shipmate:correlation-agent", model="haiku"):
 
-1. **Match by project path**: Compare `session.project_path` with repository paths from GitHub commits/PRs
-   - Normalize paths (handle workspace paths, symlinks, etc.)
-   - Look for substring matches (e.g., session in `/Users/user/myproject` matches commits in `myproject` repo)
+```text
+Correlate Claude Code sessions with GitHub activities using time proximity and path matching.
 
-2. **Match by time proximity**: Sessions within ±`correlation_window_hours` of commit/PR timestamps
-   - Calculate time difference between session and GitHub activity
-   - If within window, consider it a match
+Input:
+- GitHub Activities: {JSON from Step 3}
+- Claude Sessions: {JSON from Step 3.5}
+- Correlation Window: {correlation_window_hours from config}
 
-3. **Enrich GitHub activities**: Add `related_sessions` array to matching commits/PRs
+Match sessions to activities by:
+1. Path matching (normalized repo names)
+2. Time proximity (±{correlation_window_hours} hours)
 
-**Enriched activity format:**
-
-```json
-{
-  "type": "commit",
-  "message": "Fix auth bug",
-  "timestamp": "2025-11-06T14:30:00Z",
-  "repo": "myapp",
-  "related_sessions": [
-    {
-      "duration_minutes": 90,
-      "summary": "Debug authentication",
-      "message_count": 45,
-      "tool_usage": {
-        "file_edits": 3,
-        "bash_commands": 12,
-        "reads": 8
-      }
-    }
-  ]
-}
+Return enriched activities with related_sessions and identify orphaned sessions (investigation work without commits).
 ```
 
-**Track orphaned sessions**: Sessions that don't match any GitHub activity
+**IMPORTANT:**
+- Use Haiku model for fast, cheap correlation
+- The agent will return enriched activities with `related_sessions` arrays
+- Orphaned sessions represent investigation/exploration work
+- Store the agent's output for use in Step 6
 
-- These represent investigation work without commits
-- Store separately for inclusion in summary as "exploration" or "investigation" work
-
-**Pass to Step 6:**
-
-- Enriched GitHub activities (with `related_sessions` where applicable)
-- Orphaned sessions (for mention as investigation work)
-
-Once correlation is complete, mark todo #5 as completed.
+Once the agent returns data, mark todo #5 as completed.
 
 ### Step 5: Ask User to Select Main Topics
 

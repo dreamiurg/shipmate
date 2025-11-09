@@ -24,6 +24,8 @@
   ],
   "agents": [
     "./agents/github-analyzer-agent.md",
+    "./agents/claude-analyzer-agent.md",
+    "./agents/correlation-agent.md",
     "./agents/summarizer-agent.md"
   ]
 }
