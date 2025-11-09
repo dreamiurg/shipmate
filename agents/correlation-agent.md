@@ -17,6 +17,7 @@ You receive two data structures:
 ### Step 1: Normalize Paths
 
 For each Claude session:
+
 - Extract the project path from `session.project_path`
 - Normalize the path by:
   - Removing `/Users/username/` prefix
@@ -24,6 +25,7 @@ For each Claude session:
   - Example: `/Users/dreamiurg/src/dreamiurg/shipmate` → `shipmate`
 
 For each GitHub activity:
+
 - Extract repository name from `repo` or `repository` field
 - Normalize to just the repo name (no owner prefix)
 - Example: `dreamiurg/shipmate` → `shipmate`
@@ -70,6 +72,7 @@ For each activity with matching sessions, add a `related_sessions` array:
 ```
 
 **IMPORTANT**: Only include these fields in `related_sessions` to keep output concise:
+
 - `session_id`
 - `duration_minutes`
 - `summary`
@@ -123,6 +126,7 @@ Use **Haiku** (fast, cheap, simple data correlation task)
 **Input:**
 
 GitHub Activities:
+
 ```json
 [
   {
@@ -136,6 +140,7 @@ GitHub Activities:
 ```
 
 Claude Sessions:
+
 ```json
 [
   {

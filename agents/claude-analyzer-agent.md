@@ -18,6 +18,7 @@ You receive:
    Read session files from `~/.claude/projects/` using these steps:
 
    a. **Check if directory exists**
+
       ```bash
       ls -d ~/.claude/projects/ 2>/dev/null || echo "not-found"
       ```
@@ -25,6 +26,7 @@ You receive:
       If directory doesn't exist, skip to step 3 (return empty result).
 
    b. **List all project directories**
+
       ```bash
       ls ~/.claude/projects/
       ```
@@ -33,6 +35,7 @@ You receive:
       Convert to paths: `/Users/username/src/project`
 
    c. **For each project directory, find session files**
+
       ```bash
       ls ~/.claude/projects/{project}/*.jsonl 2>/dev/null | grep -v agent-
       ```
