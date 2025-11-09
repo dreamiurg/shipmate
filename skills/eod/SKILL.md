@@ -90,7 +90,7 @@ Store the user's selection for use in Step 3.
 
 ### Step 2.5: Read Configuration and Detect Script Paths
 
-**A. Read Claude sessions configuration from `shipmate.yaml`:**
+**A. Read configuration from `shipmate.yaml`:**
 
 Check for configuration in these locations (project-specific overrides global):
 
@@ -103,6 +103,15 @@ Extract these values from the `claude_sessions` section:
 - `time_window_hours` (default: 24)
 - `correlation_window_hours` (default: 2)
 - `min_duration_minutes` (default: 2)
+
+Extract these values from the `integrations` section:
+
+- `notion.enabled` (default: false)
+- `notion.daily_log_url` (required if notion.enabled is true)
+
+Set `HAS_INTEGRATIONS` flag:
+- `true` if any integration is enabled (e.g., `notion.enabled` is true)
+- `false` if no integrations are enabled
 
 **B. Detect script paths for agents:**
 
@@ -120,11 +129,15 @@ If the command returns nothing (running locally):
 - Set `GITHUB_SCRIPT` to `./scripts/fetch-github-activity.sh`
 - Set `CLAUDE_SCRIPT` to `./scripts/parse-claude-sessions.js`
 
-Store these paths for passing to agents in Steps 3 and 3.5.
+Store these paths and flags for use in later steps.
 
-### Step 3: Invoke GitHub Analyzer Agent
+### Step 3: Invoke Data Extraction Agents in Parallel
 
-**Mark todo #2 as completed and todo #3 as in_progress.**
+**Mark todo #2 as completed, todos #3 and #4 as in_progress.**
+
+**IMPORTANT: Run both agents in PARALLEL using a single message with TWO Task tool calls.**
+
+**Agent 1 - GitHub Analyzer:**
 
 Use the Task tool to invoke the `shipmate:github-analyzer-agent` agent (subagent_type="shipmate:github-analyzer-agent"):
 
@@ -144,23 +157,13 @@ Where:
 The script returns consolidated JSON with commits, issues, and PRs.
 ```
 
-**IMPORTANT**:
-
-- Pass the exact script path from Step 2.5
-- Specify the exact scope (personal/org name/all)
-- The agent will return structured JSON data
-
-Once the agent returns data, mark todo #3 as completed.
-
-### Step 3.5: Invoke Claude Analyzer Agent (Conditional)
-
-**Mark todo #4 as in_progress.**
+**Agent 2 - Claude Analyzer (Conditional):**
 
 **Check if Claude sessions integration is enabled** from the configuration read in Step 2.5.
 
 **If `claude_sessions.enabled` is true:**
 
-Use the Task tool to invoke the `shipmate:claude-analyzer-agent` agent (subagent_type="shipmate:claude-analyzer-agent", model="haiku"):
+Use the Task tool to invoke the `shipmate:claude-analyzer-agent` agent (subagent_type="shipmate:claude-analyzer-agent", model="haiku") **IN THE SAME MESSAGE as Agent 1**:
 
 ```text
 Extract Claude Code sessions from the last {time_window_hours} hours with minimum duration {min_duration_minutes} minutes.
@@ -180,7 +183,7 @@ The script returns JSON with session metadata including:
 
 **If `claude_sessions.enabled` is false:**
 
-Set `CLAUDE_SESSIONS` to empty result:
+Skip the Claude analyzer agent. Set `CLAUDE_SESSIONS` to empty result:
 
 ```json
 {
@@ -195,12 +198,13 @@ Set `CLAUDE_SESSIONS` to empty result:
 
 **IMPORTANT:**
 
-- Use Haiku model for fast, cheap execution
-- The agent will handle missing `~/.claude/` directory gracefully
-- Always returns valid JSON even if no sessions found
-- Store result in `CLAUDE_SESSIONS` variable for use in Step 4.5
+- Launch both agents in parallel (single message with 2 Task calls) when sessions are enabled
+- Use Haiku model for Claude analyzer (fast, cheap execution)
+- Both agents run independently and return results simultaneously
+- Store GitHub data in `GITHUB_ACTIVITIES` variable
+- Store Claude data in `CLAUDE_SESSIONS` variable
 
-Once the agent returns data (or feature is disabled), mark todo #4 as completed.
+Once both agents return data (or Claude sessions disabled), mark todos #3 and #4 as completed.
 
 ### Step 4: Analyze Activity and Identify Key Themes
 
@@ -224,9 +228,18 @@ For each theme, create a clear, descriptive label like:
 
 **IMPORTANT**: Identify ALL distinct themes, not just major ones. Include both substantial investigations and smaller tasks.
 
-### Step 4.5: Correlate Claude Sessions with GitHub Activity
+### Step 4.5: Correlate Claude Sessions with GitHub Activity (Conditional)
 
-**Before marking todo #5 as completed**, use the correlation agent to enrich GitHub activities with session data.
+**Before marking todo #5 as completed**, check if correlation is needed.
+
+**If `CLAUDE_SESSIONS.metadata.total_sessions` is 0:**
+
+- Skip correlation entirely (no sessions to correlate)
+- Set `ENRICHED_ACTIVITIES` to `GITHUB_ACTIVITIES` (pass through unchanged)
+- Set `ORPHANED_SESSIONS` to empty array
+- Mark todo #5 as completed and proceed to Step 5
+
+**If `CLAUDE_SESSIONS.metadata.total_sessions` > 0:**
 
 Use the Task tool to invoke the `shipmate:correlation-agent` agent (subagent_type="shipmate:correlation-agent", model="haiku"):
 
@@ -235,7 +248,7 @@ Correlate Claude Code sessions with GitHub activities using time proximity and p
 
 Input:
 - GitHub Activities: {JSON from Step 3}
-- Claude Sessions: {JSON from Step 3.5}
+- Claude Sessions: {JSON from Step 3}
 - Correlation Window: {correlation_window_hours from config}
 
 Match sessions to activities by:
@@ -250,9 +263,9 @@ Return enriched activities with related_sessions and identify orphaned sessions 
 - Use Haiku model for fast, cheap correlation
 - The agent will return enriched activities with `related_sessions` arrays
 - Orphaned sessions represent investigation/exploration work
-- Store the agent's output for use in Step 6
+- Store the agent's output in `ENRICHED_ACTIVITIES` and `ORPHANED_SESSIONS` for use in Step 6
 
-Once the agent returns data, mark todo #5 as completed.
+Once the agent returns data (or correlation was skipped), mark todo #5 as completed.
 
 ### Step 5: Ask User to Select Main Topics
 
@@ -323,18 +336,21 @@ Display the summary returned by the summarizer agent.
 
 Once the summary is displayed, mark todo #8 as completed.
 
-### Step 8: Check for Enabled Integrations
+### Step 8: Post to Enabled Integrations (if configured)
 
 **Mark todo #9 as in_progress.**
 
-Check the `shipmate.yaml` configuration for enabled integrations under the `integrations` section.
+Check the `HAS_INTEGRATIONS` flag set in Step 2.5.
 
-For each enabled integration, proceed to the appropriate step:
+**If `HAS_INTEGRATIONS` is false:**
 
-- If `integrations.notion.enabled: true`, proceed to Step 9
-- If other integrations are enabled in the future, handle them here
+- Skip integration posting entirely
+- Mark todo #9 as completed
+- You're done!
 
-If no integrations are enabled, mark todo #9 as completed and you're done.
+**If `HAS_INTEGRATIONS` is true:**
+
+Proceed to Step 9 to post to enabled integrations.
 
 ### Step 9: Post to Notion Daily Log (if enabled)
 
