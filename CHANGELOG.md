@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/dreamiurg/shipmate/compare/v1.3.1...v1.3.2) (2025-11-09)
+
+
+### Bug Fixes
+
+* simplify script path detection to avoid shell metacharacter issues ([25a973e](https://github.com/dreamiurg/shipmate/commit/25a973e423ced3843a6edc2f00ba3908436ee883))
+
 ## [1.3.1](https://github.com/dreamiurg/shipmate/compare/v1.3.0...v1.3.1) (2025-11-09)
 
 
