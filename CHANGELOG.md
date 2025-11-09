@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/dreamiurg/shipmate/compare/v1.3.0...v1.3.1) (2025-11-09)
+
+
+### Bug Fixes
+
+* pass script paths from skill to agents to prevent recreation ([c116f90](https://github.com/dreamiurg/shipmate/commit/c116f90d33f727fd6ca433adab1388d29fa516d8))
+
 ## [1.3.0](https://github.com/dreamiurg/shipmate/compare/v1.2.3...v1.3.0) (2025-11-09)
 
 
