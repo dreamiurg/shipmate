@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/dreamiurg/shipmate/compare/v1.2.1...v1.2.2) (2025-11-09)
+
+
+### Bug Fixes
+
+* implement shipmate improvement recommendations ([3728427](https://github.com/dreamiurg/shipmate/commit/372842704b5c42bcc910029a9ac0e8596ee22d24))
+
 ## [1.2.1](https://github.com/dreamiurg/shipmate/compare/v1.2.0...v1.2.1) (2025-11-06)
 
 
