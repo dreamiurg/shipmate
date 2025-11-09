@@ -106,21 +106,21 @@ Extract these values from the `claude_sessions` section:
 
 **B. Detect script paths for agents:**
 
-Run this command to find the shipmate plugin directory:
+Run these commands separately to find the shipmate plugin directory and set script paths:
 
 ```bash
-PLUGIN_DIR=$(find ~/.claude/plugins -name "shipmate" -type d 2>/dev/null | head -1)
-
-if [[ -n "$PLUGIN_DIR" ]]; then
-  echo "GITHUB_SCRIPT=$PLUGIN_DIR/scripts/fetch-github-activity.sh"
-  echo "CLAUDE_SCRIPT=$PLUGIN_DIR/scripts/parse-claude-sessions.js"
-else
-  echo "GITHUB_SCRIPT=./scripts/fetch-github-activity.sh"
-  echo "CLAUDE_SCRIPT=./scripts/parse-claude-sessions.js"
-fi
+find ~/.claude/plugins -name "shipmate" -type d 2>/dev/null | head -1
 ```
 
-Store the `GITHUB_SCRIPT` and `CLAUDE_SCRIPT` paths for passing to agents.
+If the command returns a path (plugin is installed):
+- Set `GITHUB_SCRIPT` to `{plugin_dir}/scripts/fetch-github-activity.sh`
+- Set `CLAUDE_SCRIPT` to `{plugin_dir}/scripts/parse-claude-sessions.js`
+
+If the command returns nothing (running locally):
+- Set `GITHUB_SCRIPT` to `./scripts/fetch-github-activity.sh`
+- Set `CLAUDE_SCRIPT` to `./scripts/parse-claude-sessions.js`
+
+Store these paths for passing to agents in Steps 3 and 3.5.
 
 ### Step 3: Invoke GitHub Analyzer Agent
 
