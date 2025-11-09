@@ -13,61 +13,37 @@ You receive:
 
 ## Your Process
 
-1. **Parse Claude sessions directly**
+1. **Use the bundled script to parse Claude sessions**
 
-   Read session files from `~/.claude/projects/` using these steps:
+   Use the `parse-claude-sessions.js` script to extract session data in a single call:
 
-   a. **Check if directory exists**
+   ```bash
+   # Detect plugin installation directory
+   PLUGIN_DIR=$(find ~/.claude/plugins -name "shipmate" -type d 2>/dev/null | head -1)
 
-      ```bash
-      ls -d ~/.claude/projects/ 2>/dev/null || echo "not-found"
-      ```
+   # Fall back to local script if not installed as plugin
+   if [[ -n "$PLUGIN_DIR" ]]; then
+     SCRIPT="$PLUGIN_DIR/scripts/parse-claude-sessions.js"
+   else
+     SCRIPT="./scripts/parse-claude-sessions.js"
+   fi
 
-      If directory doesn't exist, skip to step 3 (return empty result).
+   # Run the script with parameters
+   node "$SCRIPT" {time_window_hours} {min_duration_minutes}
+   ```
 
-   b. **List all project directories**
-
-      ```bash
-      ls ~/.claude/projects/
-      ```
-
-      Project directories are formatted like: `-Users-username-src-project`
-      Convert to paths: `/Users/username/src/project`
-
-   c. **For each project directory, find session files**
-
-      ```bash
-      ls ~/.claude/projects/{project}/*.jsonl 2>/dev/null | grep -v agent-
-      ```
-
-      Skip files starting with `agent-` (these are subagent sessions).
-
-   d. **Parse each session file**
-
-      Use the Read tool to read each `.jsonl` file.
-
-      Each line is a JSON message. Parse to extract:
-      - First message with timestamp → `start_time`
-      - Last message with timestamp → `end_time`
-      - Calculate `duration_minutes` = (end_time - start_time) / 60000
-      - First message with `cwd` field → `project_path`
-      - First user message content → `summary` (first 100 chars)
-      - Count tool uses: Edit, Bash, Read → `tool_usage`
-
-   e. **Filter sessions**
-
-      Only include sessions where:
-      - `start_time` >= (now - {time_window_hours} hours)
-      - `duration_minutes` >= {min_duration_minutes}
-
-   f. **Sort sessions**
-
-      Sort by `start_time` (most recent first).
+   This script:
+   - Checks if `~/.claude/projects/` exists
+   - Parses all session files (skips agent-*.jsonl)
+   - Extracts metadata: session_id, project_path, timestamps, duration, message count, summary, tool usage
+   - Filters by time window and minimum duration
+   - Sorts by start time (most recent first)
+   - Returns JSON with sessions and metadata
+   - Requires only ONE approval instead of multiple bash/read operations
 
 2. **Handle errors gracefully**
-   - If `~/.claude/projects/` doesn't exist: Return empty sessions array
-   - If a session file is malformed: Skip it and continue
-   - If Read tool fails: Skip that file and continue
+   - If `~/.claude/projects/` doesn't exist: Script returns empty sessions array
+   - If a session file is malformed: Script skips it and continues
    - Never fail - always return valid JSON
 
 3. **Return JSON**
