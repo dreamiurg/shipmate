@@ -56,6 +56,7 @@ Run the script with the appropriate scope:
 Where `{SCRIPT_PATH}` is provided in your task instructions.
 
 This script:
+
 - Runs all 5 queries (commits, issues created, issues closed, PRs created, PRs updated) internally
 - Filters by scope automatically
 - Returns consolidated JSON output
