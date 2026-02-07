@@ -110,6 +110,7 @@ Extract these values from the `integrations` section:
 - `notion.daily_log_url` (required if notion.enabled is true)
 
 Set `HAS_INTEGRATIONS` flag:
+
 - `true` if any integration is enabled (e.g., `notion.enabled` is true)
 - `false` if no integrations are enabled
 
@@ -122,10 +123,12 @@ find ~/.claude/plugins -name "shipmate" -type d 2>/dev/null | head -1
 ```
 
 If the command returns a path (plugin is installed):
+
 - Set `GITHUB_SCRIPT` to `{plugin_dir}/scripts/fetch-github-activity.sh`
 - Set `CLAUDE_SCRIPT` to `{plugin_dir}/scripts/parse-claude-sessions.js`
 
 If the command returns nothing (running locally):
+
 - Set `GITHUB_SCRIPT` to `./scripts/fetch-github-activity.sh`
 - Set `CLAUDE_SCRIPT` to `./scripts/parse-claude-sessions.js`
 
